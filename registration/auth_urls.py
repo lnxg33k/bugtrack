@@ -23,35 +23,38 @@ consult a specific backend's documentation for details.
 
 """
 
-from django.conf.urls import include
 from django.conf.urls import patterns
 from django.conf.urls import url
-from registration.forms import ChangePasswordForm, SetPasswordNewForm
+from registration.forms import ChangePasswordForm, SetPasswordNewForm, AuthForm
 from django.core.urlresolvers import reverse_lazy
 
+from django import get_version
+from distutils.version import LooseVersion
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = patterns('',
                        url(r'^login/$',
                            auth_views.login,
-                           {'template_name': 'registration/login.html'},
+                           {'template_name': 'registration/login.html',
+                            'authentication_form': AuthForm},
                            name='auth_login'),
                        url(r'^logout/$',
                            auth_views.logout,
                            {'template_name': 'registration/logout.html'},
                            name='auth_logout'),
-                        url(r'^password/change/$',
-                            'django.contrib.auth.views.password_change',
-                            {'password_change_form': ChangePasswordForm,
-                                'post_change_redirect': reverse_lazy('auth_password_change_done')},
-                            name='auth_password_change'),
+                       url(r'^password/change/$',
+                           'django.contrib.auth.views.password_change',
+                           {'password_change_form': ChangePasswordForm,
+                            'post_change_redirect': reverse_lazy('auth_password_change_done')},
+                           name='auth_password_change'),
                        url(r'^password/change/done/$',
                            auth_views.password_change_done,
                            name='auth_password_change_done'),
                        url(r'^password/reset/$',
                            auth_views.password_reset,
-                           {'post_reset_redirect': reverse_lazy('auth_password_reset_done')},
+                           {'post_reset_redirect': reverse_lazy(
+                               'auth_password_reset_done')},
                            name='auth_password_reset'),
                        url(r'^password/reset/complete/$',
                            auth_views.password_reset_complete,
@@ -59,22 +62,21 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
-)
+                       )
 
-
-from django import get_version
-from distutils.version import LooseVersion
 if (LooseVersion(get_version()) >= LooseVersion('1.6')):
     urlpatterns += patterns('',
                             url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
                                 auth_views.password_reset_confirm,
-                            {'post_reset_redirect': reverse_lazy('auth_password_reset_complete'), 'set_password_form': SetPasswordNewForm,},
+                                {'post_reset_redirect': reverse_lazy(
+                                    'auth_password_reset_complete'), 'set_password_form': SetPasswordNewForm, },
                                 name='auth_password_reset_confirm')
-                        )
+                            )
 else:
     urlpatterns += patterns('',
                             url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]{1,13})-(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
                                 auth_views.password_reset_confirm,
-                            {'post_reset_redirect': reverse_lazy('auth_password_reset_complete')},
+                                {'post_reset_redirect': reverse_lazy(
+                                    'auth_password_reset_complete')},
                                 name='auth_password_reset_confirm')
-                        )
+                            )
