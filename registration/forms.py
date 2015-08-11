@@ -14,20 +14,30 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from passwords.fields import PasswordField
 from captcha.fields import CaptchaField
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm, AuthenticationForm
 
 from .users import UserModel, UsernameField
 
 User = UserModel()
 
 
+class AuthForm(AuthenticationForm):
+    captcha = CaptchaField()
+
+
 class SetPasswordNewForm(SetPasswordForm):
-    new_password1 = PasswordField(label="New password", help_text='Must be 8 characters or more and common sequence of characters')
+    new_password1 = PasswordField(
+        label="New password", help_text='Must be 8 characters or more and common sequence of characters')
+
+
 class ChangePasswordForm(PasswordChangeForm):
     captcha = CaptchaField()
-    new_password1 = PasswordField(label="New password", help_text='Must be 8 characters or more and common sequence of characters')
+    new_password1 = PasswordField(
+        label="New password", help_text='Must be 8 characters or more and common sequence of characters')
+
 
 class RegistrationForm(UserCreationForm):
+
     """
     Form for registering a new user account.
 
@@ -42,7 +52,8 @@ class RegistrationForm(UserCreationForm):
     """
     required_css_class = 'required'
     captcha = CaptchaField()
-    password1 = PasswordField(label="Password", help_text='Must be 8 characters or more and common sequence of characters')
+    password1 = PasswordField(
+        label="Password", help_text='Must be 8 characters or more and common sequence of characters')
     email = forms.EmailField(label=_("E-mail"))
 
     class Meta:
@@ -51,22 +62,26 @@ class RegistrationForm(UserCreationForm):
 
 
 class RegistrationFormTermsOfService(RegistrationForm):
+
     """
     Subclass of ``RegistrationForm`` which adds a required checkbox
     for agreeing to a site's Terms of Service.
 
     """
     tos = forms.BooleanField(widget=forms.CheckboxInput,
-                             label=_('I have read and agree to the Terms of Service'),
+                             label=_(
+                                 'I have read and agree to the Terms of Service'),
                              error_messages={'required': _("You must agree to the terms to register")})
 
 
 class RegistrationFormUniqueEmail(RegistrationForm):
+
     """
     Subclass of ``RegistrationForm`` which enforces uniqueness of
     email addresses.
 
     """
+
     def clean_email(self):
         """
         Validate that the supplied email address is unique for the
@@ -74,11 +89,13 @@ class RegistrationFormUniqueEmail(RegistrationForm):
 
         """
         if User.objects.filter(email__iexact=self.cleaned_data['email']):
-            raise forms.ValidationError(_("This email address is already in use. Please supply a different email address."))
+            raise forms.ValidationError(
+                _("This email address is already in use. Please supply a different email address."))
         return self.cleaned_data['email']
 
 
 class RegistrationFormNoFreeEmail(RegistrationForm):
+
     """
     Subclass of ``RegistrationForm`` which disallows registration with
     email addresses from popular free webmail services; moderately
@@ -101,5 +118,6 @@ class RegistrationFormNoFreeEmail(RegistrationForm):
         """
         email_domain = self.cleaned_data['email'].split('@')[1]
         if email_domain in self.bad_domains:
-            raise forms.ValidationError(_("Registration using free email addresses is prohibited. Please supply a different email address."))
+            raise forms.ValidationError(
+                _("Registration using free email addresses is prohibited. Please supply a different email address."))
         return self.cleaned_data['email']
