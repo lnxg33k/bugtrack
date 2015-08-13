@@ -1,13 +1,21 @@
 {% load i18n %}
 {% load url from future %}
+{% load static from staticfiles %}
 <!doctype html>
 <html lang="en">
 
 <head>
     <title>Django Registration Test App</title>
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    {% block extra_css %}
+
+    {% endblock extra_css %}
 </head>
 
 <body>
+{% comment %}
+
+
     <div id="header">
     {% block header %}
     <a href="{% url 'index' %}">{% trans "Home" %}</a> |
@@ -34,6 +42,12 @@
 
     {% endblock %}
     </div>
+    {% endcomment %}
+    <div class="container">
+{% block content %}
+{% endblock %}
+    </div>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
 </body>
 
 </html>
