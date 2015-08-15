@@ -5,7 +5,7 @@
 
 {% block title %}{% trans "Log in" %}{% endblock %}
 {% block extra_css %}
-    <link href="{% static "css/signin.css" %}" rel="stylesheet">
+    <link href="{% static "css/auth.css" %}" rel="stylesheet">
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
@@ -24,7 +24,7 @@
 {% endif %}
 <div class="form-group {% if form.username.errors %} has-error has-feedback {% endif %}">
     <label for="id_username" class="sr-only">Username</label>
-    <input type="text" id="id_username" class="form-control has-success" placeholder="Username" name="username"  autofocus autocomplete="off">{% if form.username.errors %} <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="help-block">{{ form.username.errors.as_text }}</span>{% endif %}
+    <input type="text" id="id_username" class="form-control" placeholder="Username" name="username"  autofocus autocomplete="off">{% if form.username.errors %} <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="help-block">{{ form.username.errors.as_text }}</span>{% endif %}
     </div>
     <div class="form-group {% if form.password.errors %} has-error has-feedback {% endif %}">
     <label for="id_password" class="sr-only">Password</label>
