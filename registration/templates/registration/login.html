@@ -9,7 +9,7 @@
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-6">
 <form method="post" action="" class="form-signin">
     {% csrf_token %}
     <legend><h3>Please sign in</h3></legend>
@@ -46,6 +46,9 @@
 <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
 <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
 </div>
+</div>
+<div class="col-md-6">
+    <img src="{% static "img/bug.png" %}" height="460px" width="550px" style="margin: 15px">
 </div>
 
 
