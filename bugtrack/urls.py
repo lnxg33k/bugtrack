@@ -22,16 +22,17 @@ from django.conf.urls.static import static
 from registration.forms import RegistrationFormUniqueEmail
 from registration.backends.default.views import RegistrationView
 
+from django.contrib.auth.decorators import login_required
+
 
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
-    url(r'^accounts/profile/',
-        TemplateView.as_view(template_name='profile.html'), name='profile'),
+    url(r'^$', login_required(
+        TemplateView.as_view(template_name='profile.html')), name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/register/$', RegistrationView.as_view(
         form_class=RegistrationFormUniqueEmail), name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
-    url(r'^ckeditor/', include('ckeditor.urls')),
+    url(r'^ckeditor-supersecret/', include('ckeditor.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
