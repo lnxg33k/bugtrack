@@ -1,45 +1,75 @@
 {% extends "registration/registration_base.html" %}
 {% load i18n %}
+{% load static from staticfiles %}
+
 
 {% block title %}{% trans "Log in" %}{% endblock %}
-
+{% block extra_css %}
+    <link href="{% static "css/signin.css" %}" rel="stylesheet">
+{% endblock extra_css %}
 {% block content %}
-<form method="post" action="">
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+<form method="post" action="" class="form-signin">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="{% trans 'Log in' %}" />
+    <legend><h3>Please sign in</h3></legend>
+    {% if form.non_field_errors %}
+  <div class="alert alert-danger">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Error:</span>
+    {% for err in form.non_field_errors %}
+    {{ err }}
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="form-group {% if form.username.errors %} has-error has-feedback {% endif %}">
+    <label for="id_username" class="sr-only">Username</label>
+    <input type="text" id="id_username" class="form-control has-success" placeholder="Username" name="username"  autofocus autocomplete="off">{% if form.username.errors %} <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="help-block">{{ form.username.errors.as_text }}</span>{% endif %}
+    </div>
+    <div class="form-group {% if form.password.errors %} has-error has-feedback {% endif %}">
+    <label for="id_password" class="sr-only">Password</label>
+
+    <input type="password" id="id_password" class="form-control" placeholder="Password" name='password' autocomplete="off">{% if form.password.errors %} <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span class="help-block">{{ form.password.errors.as_text }}</span>{% endif %}
+    </div>
+    <div class="form-group {% if form.captcha.errors %} has-error has-feedback {% endif %}">
+   {#  <span class="form-control">{{ form.captcha }}<button class='btn btn-primary btn-sm js-captcha-refresh' style="margin-bottom:4px"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button></span> #}
+    <div class="form-control">{{ form.captcha }} <a href="#" class='btn btn-primary btn-sm captcha-refresh' style="margin-bottom:3px"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a></div>
+    {% if form.captcha.errors %} <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" style="margin-top: 6px;"></span><span class="help-block">{{ form.captcha.errors.as_text }}</span>{% endif %}
+    </div>
+    {# <p class="text-danger">{{ form.captcha.errors.as_text }}</p><br /> #}
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
+<div class="well">
 <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
 <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+</div>
+</div>
+
+
+</div>
 {% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+$(function() {
 
 
-{% comment %}
-**registration/login.html**
+    // Click-handler for the refresh-link
+    $('.captcha-refresh').click(function(){
+        var $form = $(this).parents('form');
+        var url = location.protocol + "//" + window.location.hostname + ":"
+                  + location.port + "/captcha/refresh/";
 
-It's your responsibility to provide the login form in a template called
-registration/login.html by default. This template gets passed four
-template context variables:
+        // Make the AJAX-call
+        $.getJSON(url, {}, function(json) {
+            $form.find('input[name="captcha_0"]').val(json.key);
+            $form.find('img.captcha').attr('src', json.image_url);
+        });
 
-``form``
-    A Form object representing the login form. See the forms
-    documentation for more on Form objects.
-
-``next``
-    The URL to redirect to after successful login. This may contain a
-    query string, too.
-
-``site``
-    The current Site, according to the SITE_ID setting. If you don't
-    have the site framework installed, this will be set to an instance
-    of RequestSite, which derives the site name and domain from the
-    current HttpRequest.
-
-``site_name``
-    An alias for site.name. If you don't have the site framework
-    installed, this will be set to the value of
-    request.META['SERVER_NAME']. For more on sites, see The
-    "sites" framework.
-{% endcomment %}
+        return false;
+    });
+});
+</script>
+{% endblock extra_js %}
