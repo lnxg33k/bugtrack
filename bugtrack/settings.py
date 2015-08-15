@@ -143,3 +143,5 @@ PASSWORD_MIN_LENGTH = 8
 # SEND_ACTIVATION_EMAIL = False
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+CAPTCHA_OUTPUT_FORMAT = u'%(hidden_field)s%(image)s %(text_field)s'
