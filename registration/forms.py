@@ -14,11 +14,15 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from passwords.fields import PasswordField
 from captcha.fields import CaptchaField
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm, AuthenticationForm, PasswordResetForm
 
 from .users import UserModel, UsernameField
 
 User = UserModel()
+
+
+class PasswordResetNewForm(PasswordResetForm):
+    captcha = CaptchaField()
 
 
 class AuthForm(AuthenticationForm):
