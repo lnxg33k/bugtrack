@@ -25,7 +25,8 @@ consult a specific backend's documentation for details.
 
 from django.conf.urls import patterns
 from django.conf.urls import url
-from registration.forms import ChangePasswordForm, SetPasswordNewForm, AuthForm
+from registration.forms import (ChangePasswordForm, SetPasswordNewForm,
+                                AuthForm, PasswordResetNewForm)
 from django.core.urlresolvers import reverse_lazy
 
 from django import get_version
@@ -46,7 +47,8 @@ urlpatterns = patterns('',
                        url(r'^password/change/$',
                            'django.contrib.auth.views.password_change',
                            {'password_change_form': ChangePasswordForm,
-                            'post_change_redirect': reverse_lazy('auth_password_change_done')},
+                            'post_change_redirect': reverse_lazy(
+                                'auth_password_change_done')},
                            name='auth_password_change'),
                        url(r'^password/change/done/$',
                            auth_views.password_change_done,
@@ -54,7 +56,9 @@ urlpatterns = patterns('',
                        url(r'^password/reset/$',
                            auth_views.password_reset,
                            {'post_reset_redirect': reverse_lazy(
-                               'auth_password_reset_done')},
+                               'auth_password_reset_done'),
+                            'password_reset_form': PasswordResetNewForm
+                            },
                            name='auth_password_reset'),
                        url(r'^password/reset/complete/$',
                            auth_views.password_reset_complete,
