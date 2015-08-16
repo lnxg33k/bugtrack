@@ -28,20 +28,25 @@ from django.conf.urls import url
 from registration.forms import (ChangePasswordForm, SetPasswordNewForm,
                                 AuthForm, PasswordResetNewForm)
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 
 from django import get_version
 from distutils.version import LooseVersion
 from django.contrib.auth import views as auth_views
 
+login_forbidden = user_passes_test(
+  lambda u: u.is_anonymous(), reverse_lazy('profile'),
+  redirect_field_name=None)
 
 urlpatterns = patterns('',
                        url(r'^login/$',
-                           auth_views.login,
+                           login_forbidden(auth_views.login),
                            {'template_name': 'registration/login.html',
                             'authentication_form': AuthForm},
                            name='auth_login'),
                        url(r'^logout/$',
-                           auth_views.logout,
+                           login_required(auth_views.logout),
                            {'template_name': 'registration/logout.html'},
                            name='auth_logout'),
                        url(r'^password/change/$',
@@ -54,7 +59,7 @@ urlpatterns = patterns('',
                            auth_views.password_change_done,
                            name='auth_password_change_done'),
                        url(r'^password/reset/$',
-                           auth_views.password_reset,
+                           login_forbidden(auth_views.password_reset),
                            {'post_reset_redirect': reverse_lazy(
                                'auth_password_reset_done'),
                             'password_reset_form': PasswordResetNewForm
