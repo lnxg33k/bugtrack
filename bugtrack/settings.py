@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'app',
     'captcha',
     'preventconcurrentlogins',
+    'django-dual-authentication',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -147,3 +148,6 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CAPTCHA_OUTPUT_FORMAT = u'%(hidden_field)s%(image)s %(text_field)s'
+
+LOGIN_REDIRECT_URL = '/'
+AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
