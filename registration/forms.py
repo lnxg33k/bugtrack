@@ -59,10 +59,12 @@ class RegistrationForm(UserCreationForm):
     password1 = PasswordField(
         label="Password", help_text='Must be 8 characters or more and common sequence of characters')
     email = forms.EmailField(label=_("E-mail"))
+    first_name = forms.CharField()
+    last_name = forms.CharField()
 
     class Meta:
         model = User
-        fields = (UsernameField(), "email")
+        fields = (UsernameField(), "email", "first_name", "last_name")
 
 
 class RegistrationFormTermsOfService(RegistrationForm):
