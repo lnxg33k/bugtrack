@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'ckeditor',
     'app',
     'captcha',
+    'preventconcurrentlogins',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,6 +55,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'preventconcurrentlogins.middleware.PreventConcurrentLoginsMiddleware',
 )
 
 ROOT_URLCONF = 'bugtrack.urls'
