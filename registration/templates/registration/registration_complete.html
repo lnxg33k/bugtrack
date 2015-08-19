@@ -1,18 +1,27 @@
 {% extends "registration/registration_base.html" %}
 {% load i18n %}
+{% load static from staticfiles %}
+
 
 {% block title %}{% trans "Activation email sent" %}{% endblock %}
-
+{% block extra_css %}
+    <link href="{% static "css/auth.css" %}" rel="stylesheet">
+    <style type="text/css">
+    .alert {
+        margin-top: 250px;
+    }
+</style>
+{% endblock extra_css %}
 {% block content %}
-<p>{% trans "Please check your email to complete the registration process." %}</p>
+<div class="row well">
+<div class="col-md-6">
+{# <div class="well message"><p>Password successfully changed!</p></div> #}
+<div class="alert alert-success" role="alert"><strong>Heads up! </strong>Please check your email to complete the registration process.</div>
+</div>
+<div class="col-md-6">
+    <img src="{% static "img/bug.png" %}" height="460px" width="550px" style="margin-top: 50px">
+</div>
+
+
+</div>
 {% endblock %}
-
-
-{% comment %}
-**registration/registration_complete.html**
-
-Used after successful completion of the registration form. This
-template has no context variables of its own, and should simply inform
-the user that an email containing account-activation information has
-been sent.
-{% endcomment %}
