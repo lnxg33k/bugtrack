@@ -6,11 +6,30 @@
 {% endblock %}
 
 
-{% comment %}
-**registration/activate.html**
+{% extends "registration/registration_base.html" %}
+{% load i18n %}
+{% load static from staticfiles %}
 
-Used if account activation fails. With the default setup, has the following context:
 
-``activation_key``
-    The activation key used during the activation attempt.
-{% endcomment %}
+{% block title %}{% trans "Account Activated" %}{% endblock %}
+{% block extra_css %}
+    <link href="{% static "css/auth.css" %}" rel="stylesheet">
+    <style type="text/css">
+    .alert {
+        margin-top: 250px;
+    }
+</style>
+{% endblock extra_css %}
+{% block content %}
+<div class="row well">
+<div class="col-md-6">
+{# <div class="well message"><p>Password successfully changed!</p></div> #}
+<div class="alert alert-danger" role="alert"><strong>Oh snap! </strong>Account activation failed.</div>
+</div>
+<div class="col-md-6">
+    <img src="{% static "img/bug.png" %}" height="460px" width="550px" style="margin-top: 50px">
+</div>
+
+
+</div>
+{% endblock %}
