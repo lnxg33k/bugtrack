@@ -72,7 +72,7 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
-                       url(r'^update/$', updateUserProfile, {
+                       url(r'^update/$', login_required(updateUserProfile), {
                            'template_name': 'registration/profile_update.html'
                            })
                        )
