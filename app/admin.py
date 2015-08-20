@@ -276,7 +276,8 @@ class StakeholderAdmin(admin.ModelAdmin):
     get_assessments.short_description = 'Assessments'
     get_assessments.allow_tags = True
 
-    list_display = ('username', 'email', 'get_assessments', 'last_login',
+    list_display = ('username', 'first_name', 'last_name',
+                    'email', 'get_assessments', 'last_login',
                     'is_active', 'is_staff')
     list_filter = ('last_login', 'is_active', 'is_staff', 'assessment__name')
     search_fields = ['username', 'email']

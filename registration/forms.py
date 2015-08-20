@@ -14,7 +14,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from passwords.fields import PasswordField
 from captcha.fields import CaptchaField
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm, AuthenticationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm, AuthenticationForm, PasswordResetForm, UserChangeForm
 
 from .users import UserModel, UsernameField
 
@@ -23,6 +23,21 @@ User = UserModel()
 
 class PasswordResetNewForm(PasswordResetForm):
     captcha = CaptchaField()
+
+
+class UpdateProfile(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', )
+
+    def clean_password(self):
+        return ""
+
+    def clean_email(self):
+        if User.objects.filter(email__iexact=self.cleaned_data['email']).exclude(username=self.cleaned_data['username']).count():
+            raise forms.ValidationError(
+                _("This email address is already in use. Please supply a different email address."))
+        return self.cleaned_data['email']
 
 
 class AuthForm(AuthenticationForm):
