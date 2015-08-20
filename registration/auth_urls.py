@@ -33,6 +33,7 @@ from django.contrib.auth.decorators import login_required
 
 from django import get_version
 from distutils.version import LooseVersion
+from .views import updateUserProfile
 from django.contrib.auth import views as auth_views
 
 login_forbidden = user_passes_test(
@@ -71,6 +72,9 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
+                       url(r'^update/$', updateUserProfile, {
+                           'template_name': 'registration/profile_update.html'
+                           })
                        )
 
 if (LooseVersion(get_version()) >= LooseVersion('1.6')):
