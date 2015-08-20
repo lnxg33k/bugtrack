@@ -17,7 +17,7 @@
 {% endblock extra_css %}
 {% block content %}
 {# {{ form.as_table }} #}
-{# <div class="row"> #}
+<div class="row">
 <div class="col-md-7">
 <legend><h3>Register a new account</h3></legend>
 <form method="post" action="" class="form-horizontal">
@@ -87,7 +87,7 @@
 
 </div>
 <div class="col-md-5">
-    <img src="{% static "img/bug.png" %}" height="460px" width="550px" style="margin-top: 25px">
+    <img src="{% static "img/bug.png" %}" height="400px" width="550px" style="margin-top: 95px" class="img-responsive hidden-sm">
     <div class="jumbotron">
 <p>{% trans "Have an account?" %} <a href="{% url 'auth_login' %}">{% trans "Sign in" %}</a>.</p>
 <p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p>
@@ -96,7 +96,7 @@
 </div>
 
 
-{# </div> #}
+</div>
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript">
