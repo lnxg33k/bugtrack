@@ -4,6 +4,9 @@ Views which allow users to create and activate accounts.
 """
 
 from django.shortcuts import redirect
+from django.template import RequestContext
+from django.shortcuts import render_to_response
+from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.conf import settings
@@ -11,12 +14,23 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 
 from .compat import import_string
-# from .forms import RegistrationForm
+from .forms import UpdateProfile
 # from . import signals
 
 REGISTRATION_FORM_PATH = getattr(settings, 'REGISTRATION_FORM',
                                  'registration.forms.RegistrationForm')
 REGISTRATION_FORM = import_string(REGISTRATION_FORM_PATH)
+
+
+def updateUserProfile(request, template_name='registration/profile_update.html'):
+    if request.method == 'POST':
+        form = UpdateProfile(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Change success")
+    else:
+        form = UpdateProfile(instance=request.user)
+    return render_to_response(template_name, {'form': form}, context_instance=RequestContext(request))
 
 
 class _RequestPassingFormView(FormView):
