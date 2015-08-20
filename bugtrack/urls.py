@@ -22,8 +22,13 @@ from django.conf.urls.static import static
 from registration.forms import RegistrationFormUniqueEmail
 from registration.backends.default.views import RegistrationView
 
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
 
+login_forbidden = user_passes_test(
+  lambda u: u.is_anonymous(), reverse_lazy('profile'),
+  redirect_field_name=None)
 
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
@@ -31,8 +36,9 @@ urlpatterns = [
         TemplateView.as_view(template_name='profile.html')), name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
-    url(r'^accounts/register/$', RegistrationView.as_view(
-        form_class=RegistrationFormUniqueEmail), name='registration_register'),
+    url(r'^accounts/register/$', login_forbidden(RegistrationView.as_view(
+        form_class=RegistrationFormUniqueEmail)),
+        name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^ckeditor-supersecret/', include('ckeditor.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
