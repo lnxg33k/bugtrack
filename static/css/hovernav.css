@@ -1,0 +1,52 @@
+/*
+Navbar "hovernav" dropdown menu - this works only for screen sizes larger than phones.
+The Bootstrap CSS is unchanged.
+*/
+@media (min-width: 768px) {
+  /* Use this if you wish to hide the caret
+  .navbar-nav .caret {
+    display: none;
+  }
+  */
+  .navbar-nav .open ul {
+    display: none;
+  }
+  .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:hover,
+  .navbar-default .navbar-nav > .open > a:focus {
+    color: #555;
+    background: none
+  }
+  .navbar-default .navbar-nav > li:hover {
+    background: #e7e7e7
+  }
+  .navbar-inverse .navbar-nav > .open > a,
+  .navbar-inverse .navbar-nav > .open > a:hover,
+  .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #969696;
+    background: none
+  }
+  .navbar-inverse .navbar-nav > li:hover {
+    background: #080808
+  }
+  .navbar-nav .hovernav:hover > .dropdown-menu {
+    display: block;
+  }
+  .dropdown ul.dropdown-menu {
+    border-radius:4px;
+    box-shadow:none;
+    margin-top:10px;
+    width:300px;
+}
+.dropdown ul.dropdown-menu:after {
+    content: "";
+    border-bottom: 12px solid #ccc;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+    position: absolute;
+    top: -12px;
+    right: 14px;
+    z-index: 9;
+}
+}
+
