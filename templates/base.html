@@ -9,6 +9,7 @@
     <link rel="icon" href="{% static "img/favicon.ico" %}">
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "css/style.css" %}" rel="stylesheet">
+    {# <link href="{% static "css/hovernav.css" %}" rel="stylesheet"> #}
     {% block extra_css %}
 
     {% endblock extra_css %}
@@ -36,7 +37,7 @@
           {% if user.is_authenticated %}
                           <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as {% if user.first_name %}{{ user.first_name|capfirst }}{% else %}{{ user }}{% endif %} <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as {% if user.get_full_name %}{{ user.get_full_name|capfirst }}{% else %}{{ user }}{% endif %} <span class="caret"></span></a>
           <ul class="dropdown-menu">
                        <li><a href="{% url "auth_password_change" %}">Change Password</a></li>
                       <li class="divider"></li>
@@ -64,6 +65,7 @@
     </div>
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
+    {# // <script src="{% static "js/hovernav.js" %}"></script> #}
     {% block extra_js %}
 
     {% endblock extra_js %}
