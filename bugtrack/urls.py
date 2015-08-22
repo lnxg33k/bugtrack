@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 from django.conf.urls.static import static
 
 from registration.forms import RegistrationFormUniqueEmail
@@ -35,6 +35,8 @@ login_forbidden = user_passes_test(
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', login_required(views.profile), name='profile'),
+    url(r'^assessment/(?P<slug>[-\w]+)$', 'app.views.view_assessment',
+        name='assessment_detail'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/register/$', login_forbidden(RegistrationView.as_view(
