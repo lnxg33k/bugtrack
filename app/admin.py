@@ -97,7 +97,7 @@ class AssessmentAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'name', 'introduction', ('created_at', 'ends_at'),
+                ('name', 'slug'), 'introduction', ('created_at', 'ends_at'),
                 ('status', 'is_published'), 'stakeholders')
         }),
         ('More options', {
@@ -150,6 +150,7 @@ class AssessmentAdmin(admin.ModelAdmin):
     get_short_introduction.short_description = "Introduction"
 
     actions = ['make_published']
+    readonly_fields = ['slug']
 
 
 @admin.register(Finding)

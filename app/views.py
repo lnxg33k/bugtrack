@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from app.models import Assessment, Stakeholder, Finding
@@ -25,3 +25,10 @@ def profile(request):
             paginator_assessments.num_pages)
     return render_to_response(
         'profile.html', locals(), context_instance=RequestContext(request))
+
+
+def view_assessment(request, slug):
+    assessment = get_object_or_404(Assessment, slug=slug)
+    return render_to_response(
+        'view_assessment.html', locals(),
+        context_instance=RequestContext(request))
