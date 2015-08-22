@@ -1,8 +1,92 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
 {% load i18n %}
 
 {% block title %}Account Profile{% endblock %}
 
 {% block content %}
-{{ request.user }}
+<div class="row">
+    <div class="col-md-12">
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Assessments <span class="badge pull-right">{{ assessments|length }} Assessments</span></div>
+
+  <!-- Table -->
+  <table class="table">
+  <thead>
+      <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Findings</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+  {% for assessment in assessments_pag %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ assessment.name }}</td>
+      <td>{{ assessment.finding_set.count }}</td>
+      <td>{{ assessment.created_at }}</td>
+      <td>{{ assessment.ends_at }}</td>
+      <td><button class="btn btn-primary btn-xs">View</button></td>
+    </tr>
+  {% endfor %}
+    </tbody>
+  </table>
+</div>
+    {% if assessments_pag.has_other_pages %}
+            <nav class="text-center">
+    <ul class="pagination">
+    {% if assessments_pag.has_previous %}
+        {# <li><a href="?page=1"><<</a></li> #}
+        {# <li><a href="?page={{ assessments_pag.previous_page_number }}"><</a></li> #}
+          <li class="pagination-prev"><a href="?page={{ assessments_pag.previous_page_number }}">«</a></li>
+    {% else %}
+        <li class="disabled"><a href="#">«</a></li>
+    {% endif %}
+
+    {% for i in assessments_pag.paginator.page_range %}
+        <li {% if assessments_pag.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>
+    {% endfor %}
+
+    {% if assessments_pag.has_next %}
+        {# <li><a href="?page={{ assessments_pag.next_page_number }}">></a></li> #}
+        {# <li><a href="?page={{ assessments_pag.paginator.num_pages }}">>></a></li> #}
+        <li class="pagination-next"><a href="?page={{ assessments_pag.paginator.num_pages }}">»</a></li>
+    {% else %}
+         <li class="disabled"><a href="#">»</a></li>
+    {% endif %}
+</ul>
+</nav>
+    {% endif %}
+    </div>
+
+    {% comment %}
+
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Findings <span class="badge pull-right">{{ findings|length }} Findings</span></div>
+
+  <!-- Table -->
+  <table class="table">
+
+  </table>
+</div>
+    </div>
+    {% endcomment %}
+</div>
+{# {{ request.user }} #}
 {% endblock %}
+{% block extra_js %}
+    <script src="{% static "js/responsive-paginate.js" %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+    $(".pagination").rPage();
+});
+    </script>
+{% endblock extra_js %}
