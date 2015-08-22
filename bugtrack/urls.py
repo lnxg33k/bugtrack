@@ -26,14 +26,15 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
 
+from app import views
+
 login_forbidden = user_passes_test(
   lambda u: u.is_anonymous(), reverse_lazy('profile'),
   redirect_field_name=None)
 
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^$', login_required(
-        TemplateView.as_view(template_name='profile.html')), name='profile'),
+    url(r'^$', login_required(views.profile), name='profile'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/register/$', login_forbidden(RegistrationView.as_view(

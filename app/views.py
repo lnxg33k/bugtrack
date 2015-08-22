@@ -1,3 +1,27 @@
-from django.shortcuts import render
-
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from app.models import Assessment, Stakeholder, Finding
 # Create your views here.
+
+
+def profile(request):
+    stakeholder = Stakeholder.objects.get(username=request.user)
+    assessments = Assessment.objects.filter(
+                        stakeholders=stakeholder).order_by('-created_at')
+    findings = Finding.objects.filter(assessment=assessments)
+    paginator_assessments = Paginator(assessments, 10)
+    paginator_findings = Paginator(findings, 1)
+
+    page = request.GET.get('page')
+    try:
+        assessments_pag = paginator_assessments.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        assessments_pag = paginator_assessments.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        assessments_pag = paginator_assessments.page(
+            paginator_assessments.num_pages)
+    return render_to_response(
+        'profile.html', locals(), context_instance=RequestContext(request))
