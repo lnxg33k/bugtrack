@@ -74,7 +74,8 @@ urlpatterns = patterns('',
                            name='auth_password_reset_done'),
                        url(r'^update/$', login_required(updateUserProfile), {
                            'template_name': 'registration/profile_update.html'
-                           })
+                           },
+                           name='update_profile')
                        )
 
 if (LooseVersion(get_version()) >= LooseVersion('1.6')):

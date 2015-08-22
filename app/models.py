@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.template.defaultfilters import slugify
 from django.template.defaultfilters import truncatechars
 
 
@@ -35,6 +36,7 @@ class Assessment(models.Model):
         ("completed", "Completed"),
     )
     name = models.CharField("Assessment", max_length=50)
+    slug = models.SlugField(unique=True)
     stakeholders = models.ManyToManyField(Stakeholder, blank=True)
     introduction = models.TextField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
@@ -54,6 +56,17 @@ class Assessment(models.Model):
 
     def __str__(self):
         return "%s" % self.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('assessment_detail', (),
+                {'slug': self.slug}
+                )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Assessment, self).save(*args, **kwargs)
 
 
 class Reference(models.Model):
