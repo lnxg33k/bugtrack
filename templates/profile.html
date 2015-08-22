@@ -25,14 +25,16 @@
   </thead>
   <tbody>
   {% for assessment in assessments_pag %}
+  {% if assessment.is_published %}
     <tr>
       <td>{{ forloop.counter }}</td>
       <td>{{ assessment.name }}</td>
       <td>{{ assessment.finding_set.count }}</td>
       <td>{{ assessment.created_at }}</td>
       <td>{{ assessment.ends_at }}</td>
-      <td><button class="btn btn-primary btn-xs">View</button></td>
+      <td><a class="btn btn-primary btn-xs" href="{% url "assessment_detail" assessment.slug %}">View</a></td>
     </tr>
+      {% endif %}
   {% endfor %}
     </tbody>
   </table>
