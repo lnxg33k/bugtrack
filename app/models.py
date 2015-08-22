@@ -36,7 +36,7 @@ class Assessment(models.Model):
         ("completed", "Completed"),
     )
     name = models.CharField("Assessment", max_length=50)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     stakeholders = models.ManyToManyField(Stakeholder, blank=True)
     introduction = models.TextField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
@@ -65,7 +65,7 @@ class Assessment(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.name)
         super(Assessment, self).save(*args, **kwargs)
 
 
