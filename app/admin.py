@@ -98,7 +98,7 @@ class AssessmentAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 ('name', 'slug'), 'introduction', ('created_at', 'ends_at'),
-                ('status', 'is_published'), 'stakeholders')
+                ('status', 'is_published', 'publish_date'), 'stakeholders')
         }),
         ('More options', {
             'classes': ('grp-collapse grp-closed',),
@@ -109,7 +109,7 @@ class AssessmentAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'get_short_introduction', 'get_stakeholders',
         'number_of_findings',
-        'status', 'created_at', 'ends_at', 'is_published'
+        'status', 'created_at', 'ends_at',  'publish_date', 'is_published'
     )
 
     list_filter = (

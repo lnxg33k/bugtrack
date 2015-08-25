@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import datetime
 from django.template.defaultfilters import slugify
 from django.template.defaultfilters import truncatechars
 
@@ -44,6 +45,7 @@ class Assessment(models.Model):
     scope = models.TextField(null=True, blank=True)
     methodology = models.TextField(null=True, blank=True)
     caveats = models.TextField(null=True, blank=True)
+    publish_date = models.DateField("Publish Date", null=True, blank=True)
     created_at = models.DateField("Satrt Date", null=True, blank=True)
     ends_at = models.DateField("End Date", null=True, blank=True)
     status = models.CharField(
