@@ -171,8 +171,9 @@ class FindingAdmin(admin.ModelAdmin):
     }
     list_display = (
         'title', 'risk', 'assessment', 'created_at',
-        'is_fixed', 'is_published')
-    list_filter = ('assessment__name', 'risk', 'is_fixed', 'is_published')
+        'is_fixed', 'is_fix_verified', 'is_published')
+    list_filter = ('assessment__name', 'risk', 'is_fixed',
+                   'is_fix_verified', 'is_published')
     search_fields = ['title', 'assessment__name']
 
     readonly_fields = ('fix_date',)
@@ -189,7 +190,7 @@ class FindingAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-open',),
             'fields': (
                 'title', 'overview',
-                ('is_fixed', 'fixed_by', 'fix_date'),
+                ('is_fixed', 'is_fix_verified', 'fixed_by', 'fix_date'),
                 'is_published', 'allow_comments')
         }),
         ('Risk', {
