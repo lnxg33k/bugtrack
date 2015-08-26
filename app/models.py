@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from datetime import datetime
 from django.template.defaultfilters import slugify
 from django.template.defaultfilters import truncatechars
 
@@ -139,6 +138,7 @@ class Finding(models.Model):
     title = models.CharField("Finding", max_length=50)
     risk = models.CharField("Risk", max_length=50, choices=risk_choices)
     is_fixed = models.BooleanField(default=False)
+    is_fix_verified = models.BooleanField(default=False)
     fix_date = models.DateTimeField(blank=True, null=True)
     fixed_by = models.ForeignKey(Stakeholder, null=True, blank=True)
     is_published = models.BooleanField(default=False)
