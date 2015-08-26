@@ -33,7 +33,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-          <li class="active"><a href="{% url "profile" %}">Home</a></li>
+          <li class="active"><a href="{% url "profile" %}"><i class="fa fa-home fa-fw"></i>&nbsp;Home</a></li>
           </ul>
           {% if user.is_authenticated %}
                           <ul class="nav navbar-nav navbar-right">
@@ -42,7 +42,7 @@
                             {# <a class="btn btn-primary" href="#"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|capfirst }}{% else %}{{ user }}{% endif %}</a> #}
                             {# <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"> #}
     {# <span class="fa fa-caret-down"></span></a> #}
-                    <button class="btn btn-primary"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|capfirst }}{% else %}{{ user }}{% endif %}</button>
+                    <button data-toggle="dropdown" class="btn btn-primary"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|capfirst }}{% else %}{{ user }}{% endif %}</button>
                     <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></button>
                     <ul class="dropdown-menu">
                       <li><a href="{% url "auth_password_change" %}"><i class="fa fa-pencil-square-o"></i> Change password</a></li>
