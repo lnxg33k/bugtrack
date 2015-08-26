@@ -35,7 +35,8 @@ login_forbidden = user_passes_test(
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^$', login_required(views.profile), name='profile'),
-    url(r'^assessment/(?P<slug>[-\w]+)$', 'app.views.view_assessment',
+    url(r'^assessment/(?P<slug>[-\w]+)$',
+        login_required(views.view_assessment),
         name='assessment_detail'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
