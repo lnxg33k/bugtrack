@@ -5,6 +5,7 @@ from django.db.models import Count
 from django.db import models
 from ckeditor.widgets import CKEditorWidget
 from django.template.defaultfilters import truncatewords_html
+from app.forms import StakeholderForm
 from app.models import (
     Assessment, Finding, Reference, Attachment, Stakeholder, Comment)
 
@@ -250,6 +251,7 @@ class FindingAdmin(admin.ModelAdmin):
 
 @admin.register(Stakeholder)
 class StakeholderAdmin(admin.ModelAdmin):
+    form = StakeholderForm
     fieldsets = (
         ('User Profile', {
             'fields': (

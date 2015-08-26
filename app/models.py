@@ -17,11 +17,14 @@ class Stakeholder(User):
         super(Stakeholder, self).__init__(*args, **kwargs)
         self._meta.get_field('email').blank = False
 
-    def save(self, *args, **kwargs):
-        # do anything you need before saving
-        self.set_password(self.password)
-        super(Stakeholder, self).save(*args, **kwargs)
-        # do anything you need after saving
+    # def save(self, *args, **kwargs):
+    #     if self.pk is not None:
+    #         orig = Stakeholder.objects.get(pk=self.pk)
+    #         if orig.password != self.password:
+    #             # do anything you need before saving
+    #             self.set_password(self.password)
+    #     super(Stakeholder, self).save(*args, **kwargs)
+    #     # do anything you need after saving
 
     class Meta:
         proxy = True
