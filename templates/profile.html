@@ -7,7 +7,7 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-<div class="panel panel-default">
+<div class="panel panel-primary">
   <!-- Default panel contents -->
   <div class="panel-heading">Assessments <span class="badge pull-right">{{ assessments|length }} Assessments</span></div>
 
@@ -27,7 +27,7 @@
   {% for assessment in assessments_pag %}
   {% if assessment.is_published %}
     <tr>
-      <td>{{ forloop.counter }}</td>
+      <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
       <td>{{ assessment.name }}</td>
       <td>{{ assessment.finding_set.count }}</td>
       <td>{{ assessment.created_at }}</td>
