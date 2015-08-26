@@ -68,7 +68,8 @@ class Assessment(models.Model):
                 )
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        orig = Assessment.objects.get(pk=self.pk)
+        if not self.slug or orig.slug != slugify(self.name):
             self.slug = slugify(self.name)
         super(Assessment, self).save(*args, **kwargs)
 
