@@ -8,7 +8,7 @@ from app.models import Assessment, Stakeholder, Finding
 def profile(request):
     stakeholder = Stakeholder.objects.get(username=request.user)
     assessments = Assessment.objects.filter(
-                        stakeholders=stakeholder).order_by('-created_at')
+                        stakeholders=stakeholder).order_by('-ends_at')
     findings = Finding.objects.filter(assessment=assessments)
     paginator_assessments = Paginator(assessments, 10)
     paginator_findings = Paginator(findings, 1)
