@@ -28,7 +28,9 @@ def profile(request):
 
 
 def view_assessment(request, slug):
-    assessment = get_object_or_404(Assessment, slug=slug)
+    stakeholder = Stakeholder.objects.get(username=request.user)
+    assessment = get_object_or_404(
+        Assessment, slug=slug, stakeholders=stakeholder)
     return render_to_response(
         'view_assessment.html', locals(),
         context_instance=RequestContext(request))

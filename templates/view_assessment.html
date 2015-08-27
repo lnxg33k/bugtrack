@@ -1,9 +1,77 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load i18n %}
-
 {% block title %}Account Profile{% endblock %}
-
+{% block extra_css %}
+<link href="{% static "ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/tomorrow.css" %}" rel="stylesheet">
+<style type="text/css">
+    pre {
+        background-color: transparent;
+        /*border: none;*/
+    }
+    .tab-content {
+        padding-top: 15px;
+    }
+    .panel-heading {
+        cursor: pointer;
+    }
+</style>
+{% endblock extra_css %}
 {% block content %}
-    {{ assessment }}
-{% endblock content %}
+<div class="row">
+    <div class="col-md-12">
+        <legend>Details about <strong>{{ assessment.name }}</strong> assessment</legend>
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+            <li><a href="#findings" data-toggle="tab">Findings</a></li>
+            <li><a href="#messages" data-toggle="tab">Messages <span class="badge">3</span></a></li>
+        </ul>
+        {# {{ assessment }} #}
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="info">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingIntroduction" data-toggle="collapse" data-parent="#accordion" data-target="#introduction">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Introduction<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="introduction" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingIntroduction">
+                            <div class="panel-body">
+                                {{ assessment.introduction|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Summary<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="summary" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSummary">
+                            <div class="panel-body">
+                                {{ assessment.summary|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="findings">
+                {% lorem 3 p %}
+            </div>
+            <div class="tab-pane fade" id="messages">
+                zzzz
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js" %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock extra_js %}
