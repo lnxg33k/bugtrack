@@ -9,7 +9,7 @@
     <div class="col-md-12">
 <div class="panel panel-primary">
   <!-- Default panel contents -->
-  <div class="panel-heading">Assessments <span class="badge pull-right">{{ assessments|length }} Assessments</span></div>
+  <div class="panel-heading">Assessments <span class="badge pull-right">{{ assessments|length }} Assessment{{ assessments|length|pluralize }}</span></div>
 
   <!-- Table -->
   <table class="table table-striped">
@@ -34,11 +34,11 @@
         {% regroup assessment.finding_set.values|dictsort:"risk" by risk as risk_list %}
         {% for risk in risk_list %}
         {% if risk.grouper == 'critical' or risk.grouper == 'high' %}
-          <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+          <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
           {% elif risk.grouper == 'medium' %}
-          <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+          <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
           {% else %}
-                    <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+                    <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
 
         {% endif %}
         {% endfor %}
