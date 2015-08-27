@@ -16,7 +16,7 @@
   <thead>
       <tr>
           <th>#</th>
-          <th>Name</th>
+          <th>Title</th>
           <th>Findings</th>
           <th>Start Date</th>
           <th>End Date</th>
@@ -29,7 +29,20 @@
     <tr>
       <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
       <td>{{ assessment.name }}</td>
-      <td>{{ assessment.finding_set.count }}</td>
+      {# <td>{{ assessment.finding_set.count }}</td> #}
+      <td>
+        {% regroup assessment.finding_set.values|dictsort:"risk" by risk as risk_list %}
+        {% for risk in risk_list %}
+        {% if risk.grouper == 'critical' or risk.grouper == 'high' %}
+          <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+          {% elif risk.grouper == 'medium' %}
+          <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+          {% else %}
+                    <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|title }}</span>
+
+        {% endif %}
+        {% endfor %}
+      </td>
       <td>{{ assessment.created_at }}</td>
       <td>{{ assessment.ends_at }}</td>
       <td><a class="btn btn-primary btn-xs" href="{% url "assessment_detail" assessment.slug %}">View</a></td>
