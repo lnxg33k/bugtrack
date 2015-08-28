@@ -1,107 +1,80 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load i18n %}
-
 {% block title %}Account Profile{% endblock %}
-
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-<div class="panel panel-primary">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Assessment{{ assessments|length|pluralize }} <span class="badge pull-right">{{ assessments|length }} Assessment{{ assessments|length|pluralize }}</span></div>
-
-  <!-- Table -->
-  <table class="table table-striped">
-  <thead>
-      <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Findings</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th></th>
-      </tr>
-  </thead>
-  <tbody>
-  {% for assessment in assessments_pag %}
-  {% if assessment.is_published %}
-    <tr>
-      <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
-      <td>{{ assessment.name }}</td>
-      {# <td>{{ assessment.finding_set.count }}</td> #}
-      <td>
-        {% regroup assessment.finding_set.values|dictsort:"risk" by risk as risk_list %}
-        {% for risk in risk_list %}
-        {% if risk.grouper == 'critical' or risk.grouper == 'high' %}
-          <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
-          {% elif risk.grouper == 'medium' %}
-          <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
-          {% else %}
-                    <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
-
+        <div class="panel panel-primary">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Assessment{{ assessments|length|pluralize }} <span class="badge pull-right">{{ assessments|length }} Assessment{{ assessments|length|pluralize }}</span></div>
+            <!-- Table -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Findings</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment in assessments_pag %}
+                    {% if assessment.is_published %}
+                    <tr>
+                        <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
+                        <td>{{ assessment.name }}</td>
+                        {# <td>{{ assessment.finding_set.count }}</td> #}
+                        <td>
+                            {% regroup assessment.finding_set.values|dictsort:"risk" by risk as risk_list %}
+                            {% for risk in risk_list %}
+                            {% if risk.grouper == 'critical' or risk.grouper == 'high' %}
+                            <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
+                            {% elif risk.grouper == 'medium' %}
+                            <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
+                            {% else %}
+                            <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ assessment.created_at }}</td>
+                        <td>{{ assessment.ends_at }}</td>
+                        <td><a class="btn btn-primary btn-xs" href="{% url "assessment_detail" assessment.slug %}">View</a></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if assessments_pag.has_other_pages %}
+        <nav class="text-center">
+            <ul class="pagination">
+                {% if assessments_pag.has_previous %}
+                <li class="pagination-prev"><a href="?page={{ assessments_pag.previous_page_number }}">«</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">«</a></li>
+                {% endif %}
+                {% for i in assessments_pag.paginator.page_range %}
+                <li {% if assessments_pag.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>
+                {% endfor %}
+                {% if assessments_pag.has_next %}
+                <li class="pagination-next"><a href="?page={{ assessments_pag.paginator.num_pages }}">»</a></li>
+                {% else %}
+                <li class="disabled"><a href="#">»</a></li>
+                {% endif %}
+            </ul>
+        </nav>
         {% endif %}
-        {% endfor %}
-      </td>
-      <td>{{ assessment.created_at }}</td>
-      <td>{{ assessment.ends_at }}</td>
-      <td><a class="btn btn-primary btn-xs" href="{% url "assessment_detail" assessment.slug %}">View</a></td>
-    </tr>
-      {% endif %}
-  {% endfor %}
-    </tbody>
-  </table>
-</div>
-    {% if assessments_pag.has_other_pages %}
-            <nav class="text-center">
-    <ul class="pagination">
-    {% if assessments_pag.has_previous %}
-        {# <li><a href="?page=1"><<</a></li> #}
-        {# <li><a href="?page={{ assessments_pag.previous_page_number }}"><</a></li> #}
-          <li class="pagination-prev"><a href="?page={{ assessments_pag.previous_page_number }}">«</a></li>
-    {% else %}
-        <li class="disabled"><a href="#">«</a></li>
-    {% endif %}
-
-    {% for i in assessments_pag.paginator.page_range %}
-        <li {% if assessments_pag.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>
-    {% endfor %}
-
-    {% if assessments_pag.has_next %}
-        {# <li><a href="?page={{ assessments_pag.next_page_number }}">></a></li> #}
-        {# <li><a href="?page={{ assessments_pag.paginator.num_pages }}">>></a></li> #}
-        <li class="pagination-next"><a href="?page={{ assessments_pag.paginator.num_pages }}">»</a></li>
-    {% else %}
-         <li class="disabled"><a href="#">»</a></li>
-    {% endif %}
-</ul>
-</nav>
-    {% endif %}
     </div>
-
-    {% comment %}
-
-
-    <div class="col-md-6">
-        <div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Findings <span class="badge pull-right">{{ findings|length }} Findings</span></div>
-
-  <!-- Table -->
-  <table class="table">
-
-  </table>
 </div>
-    </div>
-    {% endcomment %}
-</div>
-{# {{ request.user }} #}
 {% endblock %}
 {% block extra_js %}
-    <script src="{% static "js/responsive-paginate.js" %}"></script>
-    <script type="text/javascript">
+<script src="{% static "js/responsive-paginate.js" %}"></script>
+<script type="text/javascript">
         $(document).ready(function () {
     $(".pagination").rPage();
 });
-    </script>
+</script>
 {% endblock extra_js %}
