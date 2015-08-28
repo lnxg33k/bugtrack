@@ -136,8 +136,24 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="findings">
-                {# {% lorem 3 p %} #}
-                {{ assessment.finding_set.all }}
+                <div class="panel-group" id="accordionFinding" aria-multiselectable="true">
+                {% for finding in findings %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingFinding{{ finding.id }}" data-toggle="collapse" data-parent="#accordionFinding" data-target="#Finding{{ finding.id }}">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            {{ finding }}<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Finding{{ finding.id }}" class="panel-collapse collapse in" aria-labelledby="headingFinding{{ finding.id }}">
+                            <div class="panel-body">
+                                {{ finding }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="tab-pane fade" id="messages">
                 {% lorem 3 p %}
