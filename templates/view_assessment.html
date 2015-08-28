@@ -22,50 +22,125 @@
     <div class="col-md-12">
         <legend>Details about <strong>{{ assessment.name }}</strong> assessment</legend>
         <ul class="nav nav-pills">
-            <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-            <li><a href="#findings" data-toggle="tab">Findings</a></li>
-            <li><a href="#messages" data-toggle="tab">Messages <span class="badge">3</span></a></li>
+            <li class="active"><a href="#info" data-toggle="tab">Information</a></li>
+            <li><a href="#findings" data-toggle="tab">Findings <span class="badge">{{ assessment.finding_set.all|length }}</span></a></li>
+            <li><a href="#messages" data-toggle="tab">Messages</a></li>
         </ul>
         {# {{ assessment }} #}
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="info">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel-group" id="accordion" aria-multiselectable="true">
                     <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingIntroduction" data-toggle="collapse" data-parent="#accordion" data-target="#introduction">
+                        <div class="panel-heading" id="headingIntroduction" data-toggle="collapse" data-parent="#accordion" data-target="#introduction">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
                             Introduction<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="introduction" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingIntroduction">
+                        <div id="introduction" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
                             <div class="panel-body">
+                                <small class="pull-right"><i class="fa fa-calendar"></i> &nbsp;{{ assessment.created_at }} <i class="fa fa-arrow-right"></i> {{ assessment.ends_at }}</small>
                                 {{ assessment.introduction|safe }}
                             </div>
                         </div>
                     </div>
+                    {% if assessment.summary %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
+                        <div class="panel-heading" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
                             Summary<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="summary" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSummary">
+                        <div id="summary" class="panel-collapse collapse in" aria-labelledby="headingSummary">
                             <div class="panel-body">
                                 {{ assessment.summary|safe }}
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if assessment.scope %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingScope" data-toggle="collapse" data-parent="#accordion" data-target="#Scope">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Scope<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Scope" class="panel-collapse collapse" aria-labelledby="headingScope">
+                            <div class="panel-body">
+                                {{ assessment.scope|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.methodology %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingMethodology" data-toggle="collapse" data-parent="#accordion" data-target="#Methodology">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Methodology<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Methodology" class="panel-collapse collapse" aria-labelledby="headingMethodology">
+                            <div class="panel-body">
+                                {{ assessment.methodology|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.caveats %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingCaveats" data-toggle="collapse" data-parent="#accordion" data-target="#Caveats">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Caveats<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Caveats" class="panel-collapse collapse" aria-labelledby="headingCaveats">
+                            <div class="panel-body">
+                                {{ assessment.caveats|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.stakeholders %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingstakeholders" data-toggle="collapse" data-parent="#accordion" data-target="#stakeholders">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Stakeholders<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="stakeholders" class="panel-collapse collapse" aria-labelledby="headingstakeholders">
+                            <div class="panel-body">
+                                <dl class="dl-horizontal">
+                                    {% for stakeholder in assessment.stakeholders.all %}
+                                    {% if not stakeholder.is_staff %}
+                                    <dt>{{ stakeholder.get_full_name|title }}</dt>
+                                    <dd>{{ stakeholder.email }}</dd>
+                                    {% endif %}
+                                    {% endfor %}
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="tab-pane fade" id="findings">
-                {% lorem 3 p %}
+                {# {% lorem 3 p %} #}
+                {{ assessment.finding_set.all }}
             </div>
             <div class="tab-pane fade" id="messages">
-                zzzz
+                {% lorem 3 p %}
             </div>
         </div>
     </div>
