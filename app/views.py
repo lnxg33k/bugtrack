@@ -32,7 +32,7 @@ def view_assessment(request, slug):
     assessment = get_object_or_404(
         Assessment, slug=slug, stakeholders=stakeholder)
     findings = Finding.objects.filter(
-        assessment=assessment).order_by('risk')
+        assessment=assessment).order_by('-risk')
 
     paginator_findings = Paginator(findings, 1)
     page = request.GET.get('page')
