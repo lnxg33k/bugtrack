@@ -137,16 +137,25 @@
             </div>
             <div class="tab-pane fade" id="findings">
                 <div class="panel-group" id="accordionFinding" aria-multiselectable="true">
-                {% for finding in findings %}
+                    {% for finding in findings %}
                     <div class="panel panel-default">
                         <div class="panel-heading" id="headingFinding{{ finding.id }}" data-toggle="collapse" data-parent="#accordionFinding" data-target="#Finding{{ finding.id }}">
                             <h4 class="panel-title">
+                            <small style="text-align:center">
+                            {% if finding.risk == 'critical' or finding.risk == 'high' %}
+                            <span class="text-danger">{{ finding.risk|capfirst }}</span></small>
+                            {% elif finding.risk == 'medium' %}
+                            <span class="text-warning">{{ finding.risk|capfirst }}</span>
+                            {% else %}
+                            <span class="text-info">{{ finding.risk|capfirst }}</span>
+                            {% endif %}
+                            </small>
                             <a class="accordion-toggle">
-                            {{ finding }}<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            {{ finding.title }}<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="Finding{{ finding.id }}" class="panel-collapse collapse in" aria-labelledby="headingFinding{{ finding.id }}">
+                        <div id="Finding{{ finding.id }}" class="panel-collapse collapse" aria-labelledby="headingFinding{{ finding.id }}">
                             <div class="panel-body">
                                 {{ finding }}
                             </div>
