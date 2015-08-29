@@ -26,17 +26,18 @@
                     <tr>
                         <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
                         <td>{{ assessment.name }}</td>
-                        {# <td>{{ assessment.finding_set.count }}</td> #}
                         <td>
-                            {% regroup assessment.finding_set.values|dictsort:"risk" by risk as risk_list %}
+                            {% regroup assessment.finding_set.all|dictsort:"risk" by get_risk_display as risk_list %}
                             {% for risk in risk_list %}
-                            {% if risk.grouper == 'critical' or risk.grouper == 'high' %}
+                            <small>
+                            {% if risk.grouper == 'Critical' or risk.grouper == 'High' %}
                             <span class="label label-danger">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
-                            {% elif risk.grouper == 'medium' %}
+                            {% elif risk.grouper == 'Medium' %}
                             <span class="label label-warning">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
                             {% else %}
                             <span class="label label-info">{{ risk.list|length }} {{ risk.grouper|capfirst }}</span>
                             {% endif %}
+                            </small>
                             {% endfor %}
                         </td>
                         <td>{{ assessment.created_at }}</td>

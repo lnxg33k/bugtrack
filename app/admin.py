@@ -187,14 +187,14 @@ class FindingAdmin(admin.ModelAdmin):
             ),
         }),
         ('Vulnerability', {
-            'classes': ('grp-collapse grp-open',),
+            'classes': ('grp-collapse grp-closed',),
             'fields': (
                 'title', 'overview',
                 ('is_fixed', 'is_fix_verified', 'fixed_by', 'fix_date'),
                 'is_published', 'allow_comments')
         }),
         ('Risk', {
-            'classes': ('grp-collapse grp-closed',),
+            'classes': ('grp-collapse grp-open',),
             'fields': ('risk', 'cvssv2', 'impact')
         }),
         ('Infected instances and URLs', {

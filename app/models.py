@@ -128,11 +128,11 @@ class Comment(models.Model):
 
 class Finding(models.Model):
     risk_choices = (
-        ("informational", "Informational"),
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("critical", "Critical"),
+        ("0", "Informational"),
+        ("1", "Low"),
+        ("2", "Medium"),
+        ("3", "High"),
+        ("4", "Critical"),
     )
     assessment = models.ForeignKey('Assessment')
     # attachment = models.ForeignKey('Attachment', null=True, blank=True)

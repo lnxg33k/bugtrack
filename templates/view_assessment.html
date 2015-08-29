@@ -26,7 +26,6 @@
             <li><a href="#findings" data-toggle="tab">Findings <span class="badge">{{ assessment.finding_set.all|length }}</span></a></li>
             <li><a href="#messages" data-toggle="tab">Messages</a></li>
         </ul>
-        {# {{ assessment }} #}
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="info">
@@ -141,16 +140,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" id="headingFinding{{ finding.id }}" data-toggle="collapse" data-parent="#accordionFinding" data-target="#Finding{{ finding.id }}">
                             <h4 class="panel-title">
-                            <small style="text-align:center">
-                            {% if finding.risk == 'critical' or finding.risk == 'high' %}
-                            <span class="text-danger">{{ finding.risk|capfirst }}</span></small>
-                            {% elif finding.risk == 'medium' %}
-                            <span class="text-warning">{{ finding.risk|capfirst }}</span>
-                            {% else %}
-                            <span class="text-info">{{ finding.risk|capfirst }}</span>
-                            {% endif %}
-                            </small>
-                            <a class="accordion-toggle">
+                            <small><span class="">{{ finding.get_risk_display }}</span></small> <a class="accordion-toggle">
                             {{ finding.title }}<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
