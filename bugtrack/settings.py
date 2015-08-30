@@ -137,7 +137,7 @@ CKEDITOR_CONFIGS = {
         'height': 200,
         'extraPlugins': 'codesnippet',
         'disableNativeSpellChecker': False,
-        'autoParagraph': False,
+        # 'autoParagraph': False,
     },
 }
 
