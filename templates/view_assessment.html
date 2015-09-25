@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 {% load i18n %}
-{% block title %}Account Profile{% endblock %}
+{% block title %}Assessment ({{ assessment }}){% endblock %}
 {% block extra_css %}
 <link href="{% static "css/tomorrow.css" %}" rel="stylesheet">
 <style type="text/css">
@@ -15,16 +15,23 @@
     .panel-heading {
         cursor: pointer;
     }
+.breadcrumb > li + li.pull-right::before {
+        content: none;
+}
 </style>
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <legend>Details about <strong>{{ assessment.name }}</strong> assessment <small class="pull-right" style="font-size: 50%; padding-top: 12px;"><i class="fa fa-calendar"></i> &nbsp;{{ assessment.created_at }} <i class="fa fa-arrow-right"></i> {{ assessment.ends_at }}</small></legend>
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">{{ assessment }}</li>
+            <li class="pull-right"><small><i class="fa fa-calendar"></i> &nbsp;{{ assessment.created_at }} <i class="fa fa-arrow-right"></i> {{ assessment.ends_at }}</small></li>
+        </ol>
         <ul class="nav nav-pills">
             <li class="active"><a href="#info" data-toggle="tab">Information</a></li>
             <li><a href="#findings" data-toggle="tab">Findings <span class="badge">{{ assessment.finding_set.all|length }}</span></a></li>
-            <li><a href="#messages" data-toggle="tab">Messages</a></li>
+            <li><a href="#statistics" data-toggle="tab">Statistics</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -146,6 +153,63 @@
             </div>
             <div class="tab-pane fade" id="findings">
                 <div class="panel-group" id="accordionFinding" aria-multiselectable="true">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Risk</th>
+                                <th>Fixed</th>
+                                <th>Fixed By</th>
+                                <th>Fix Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for finding in findings_pag %}
+                            {% if assessment.is_published %}
+                            <tr>
+                                <td>{{ forloop.counter0|add:findings_pag.start_index }}</td>
+                                <td>{{ finding.title }}</td>
+                                <td><small>
+                                    {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
+                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    {% elif finding.get_risk_display == 'Medium' %}
+                                    <span class="label label-warning" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    {% else %}
+                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    {% endif %}</small>
+                                </td>
+                                <td>
+                                    {% if finding.is_fixed %}
+                                    {% if finding.is_fix_verified %}
+                                    <i class="fa fa-check-circle-o" data-toggle="tooltip" data-placement="right" data-container="body" title="Fixed"></i>
+                                    {% else %}
+                                    <i class="fa fa-clock-o" data-toggle="tooltip" data-placement="right" data-container="body" title="Waiting to verify the fix"></i>
+                                    {% endif %}
+                                    {% else %}
+                                    <i class="fa fa-times-circle-o" data-toggle="tooltip" data-placement="right" data-container="body" title="Not Fixed"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if finding.is_fixed %}
+                                    {{ finding.fixed_by.get_full_name|title }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if finding.is_fixed %}
+                                    {{ finding.fix_date }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-xs" href="{% url "finding_detail" assessment.slug finding.slug %}">View</a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% comment %}
                     {% for finding in findings %}
                     <div class="panel panel-default">
                         <div class="panel-heading" id="headingFinding{{ finding.id }}" data-toggle="collapse" data-parent="#accordionFinding" data-target="#Finding{{ finding.id }}">
@@ -162,9 +226,29 @@
                         </div>
                     </div>
                     {% endfor %}
+                    {% endcomment %}
+                    {% if findings_pag.has_other_pages %}
+                    <nav class="text-center">
+                        <ul class="pagination">
+                            {% if findings_pag.has_previous %}
+                            <li class="pagination-prev"><a href="?fpage={{ findings_pag.previous_page_number }}">«</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">«</a></li>
+                            {% endif %}
+                            {% for i in findings_pag.paginator.page_range %}
+                            <li {% if findings_pag.number == i %} class="active" {% endif %}><a href="?fpage={{i}}">{{i}}</a></li>
+                            {% endfor %}
+                            {% if findings_pag.has_next %}
+                            <li class="pagination-next"><a href="?fpage={{ findings_pag.paginator.num_pages }}">»</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">»</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
                 </div>
             </div>
-            <div class="tab-pane fade" id="messages">
+            <div class="tab-pane fade" id="statistics">
                 {% lorem 3 p %}
             </div>
         </div>
@@ -174,4 +258,21 @@
 {% block extra_js %}
 <script src="{% static "js/highlight.pack.js" %}"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+    function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+var fpage = getParameterByName('fpage');
+if (fpage) {
+    $("ul.nav-pills li")[0].className = "";
+    $("ul.nav-pills li")[1].className = "active";
+    document.getElementById("info").className = "tab-pane fade";
+    document.getElementById("findings").className = "tab-pane fade in active";
+    // console.log(document.getElementById("findings").className)
+}
+$("[data-toggle='tooltip']").tooltip();
+</script>
 {% endblock extra_js %}
