@@ -25,7 +25,121 @@
             <li><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment }}</a></li>
             <li class="active">{{ finding }}</li>
         </ol>
-        {{ finding }}
+        {# {{ finding }} #}
+        <div class="panel-group" id="accordion" aria-multiselectable="true">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingIntroduction" data-toggle="collapse" data-parent="#accordion" data-target="#introduction">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Introduction<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="introduction" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
+                            <div class="panel-body">
+                                {{ assessment.introduction|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if assessment.summary %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Summary<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="summary" class="panel-collapse collapse in" aria-labelledby="headingSummary">
+                            <div class="panel-body">
+                                {{ assessment.summary|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    {% if assessment.stakeholders %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingstakeholders" data-toggle="collapse" data-parent="#accordion" data-target="#stakeholders">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Stakeholders<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="stakeholders" class="panel-collapse collapse in" aria-labelledby="headingstakeholders">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for stakeholder in assessment.stakeholders.all %}
+                                        {% if not stakeholder.is_staff %}
+                                        <span class="pull-left">{{ stakeholder.get_full_name|title }}</span>
+                                        <span class="pull-right"><a href="mailto:{{ stakeholder.email }}">{{ stakeholder.email }}</a></span><br />
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {# <div class="col-md-12" style="margin-top: 5px;"> #}
+                                        {# <button class="btn btn-primary btn-xs pull-right">Add</button> #}
+                                    {# </div> #}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.scope %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingScope" data-toggle="collapse" data-parent="#accordion" data-target="#Scope">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Scope<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Scope" class="panel-collapse collapse in" aria-labelledby="headingScope">
+                            <div class="panel-body">
+                                {{ assessment.scope|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.methodology %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingMethodology" data-toggle="collapse" data-parent="#accordion" data-target="#Methodology">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Methodology<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Methodology" class="panel-collapse collapse" aria-labelledby="headingMethodology">
+                            <div class="panel-body">
+                                {{ assessment.methodology|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if assessment.caveats %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingCaveats" data-toggle="collapse" data-parent="#accordion" data-target="#Caveats">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Caveats<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Caveats" class="panel-collapse collapse" aria-labelledby="headingCaveats">
+                            <div class="panel-body">
+                                {{ assessment.caveats|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
