@@ -138,6 +138,7 @@ class Finding(models.Model):
     # attachment = models.ForeignKey('Attachment', null=True, blank=True)
     references = models.ManyToManyField(Reference, blank=True)
     title = models.CharField("Finding", max_length=50)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     risk = models.CharField("Risk", max_length=50, choices=risk_choices)
     is_fixed = models.BooleanField(default=False)
     is_fix_verified = models.BooleanField(default=False)
@@ -155,6 +156,12 @@ class Finding(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('finding_detail', (),
+                {'slug': self.slug}
+                )
+
     def save(self, *args, **kwargs):
         # do anything you need before saving
         if self.is_fixed:
@@ -168,6 +175,11 @@ class Finding(models.Model):
                 self.fix_date = timezone.now()
         else:
             self.fix_date = None
+
+        if self.pk:
+            orig = Finding.objects.get(pk=self.pk)
+        if not self.slug or (orig and orig.slug != slugify(self.title)):
+            self.slug = slugify(self.title)
 
         super(Finding, self).save(*args, **kwargs)
         # do anything you need after saving

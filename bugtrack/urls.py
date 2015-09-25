@@ -38,6 +38,9 @@ urlpatterns = [
     url(r'^assessment/(?P<slug>[-\w]+)$',
         login_required(views.view_assessment),
         name='assessment_detail'),
+    url(r'^assessment/(?P<assessment_slug>[-\w]+)/(?P<slug>[-\w]+)$',
+        login_required(views.view_finding),
+        name='finding_detail'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/register/$', login_forbidden(RegistrationView.as_view(

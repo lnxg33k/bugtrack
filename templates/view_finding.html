@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% block title %}Finding ({{ finding }}){% endblock %}
+{% block extra_css %}
+<link href="{% static "css/tomorrow.css" %}" rel="stylesheet">
+<style type="text/css">
+    pre {
+        background-color: transparent;
+        /*border: none;*/
+    }
+    .tab-content {
+        padding-top: 15px;
+    }
+    .panel-heading {
+        cursor: pointer;
+    }
+</style>
+{% endblock extra_css %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment }}</a></li>
+            <li class="active">{{ finding }}</li>
+        </ol>
+        {{ finding }}
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static "js/highlight.pack.js" %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock extra_js %}
