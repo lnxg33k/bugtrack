@@ -34,8 +34,8 @@ def view_assessment(request, slug):
     findings = Finding.objects.filter(
         assessment=assessment).order_by('-risk')
 
-    paginator_findings = Paginator(findings, 1)
-    page = request.GET.get('page')
+    paginator_findings = Paginator(findings, 5)
+    page = request.GET.get('fpage')
     try:
         findings_pag = paginator_findings.page(page)
     except PageNotAnInteger:
@@ -47,4 +47,16 @@ def view_assessment(request, slug):
             paginator_findings.num_pages)
     return render_to_response(
         'view_assessment.html', locals(),
+        context_instance=RequestContext(request))
+
+
+def view_finding(request, assessment_slug, slug):
+    stakeholder = Stakeholder.objects.get(username=request.user)
+    assessment = get_object_or_404(
+        Assessment, slug=assessment_slug, stakeholders=stakeholder)
+    finding = get_object_or_404(
+        Finding, slug=slug, assessment=assessment
+    )
+    return render_to_response(
+        'view_finding.html', locals(),
         context_instance=RequestContext(request))
