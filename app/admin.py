@@ -176,7 +176,7 @@ class FindingAdmin(admin.ModelAdmin):
                    'is_fix_verified', 'is_published')
     search_fields = ['title', 'assessment__name']
 
-    readonly_fields = ('fix_date',)
+    readonly_fields = ('fix_date', 'slug')
 
     filter_horizontal = ('references', )
 
@@ -189,7 +189,7 @@ class FindingAdmin(admin.ModelAdmin):
         ('Vulnerability', {
             'classes': ('grp-collapse grp-open',),
             'fields': (
-                'title', 'overview',
+                ('title', 'slug'), 'overview',
                 ('is_fixed', 'is_fix_verified', 'fixed_by', 'fix_date'),
                 'is_published', 'allow_comments')
         }),
