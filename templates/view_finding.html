@@ -4,23 +4,8 @@
 {% block title %}Finding ({{ finding }}){% endblock %}
 {% block extra_css %}
 <link href="{% static "css/tomorrow.css" %}" rel="stylesheet">
+<link href="{% static "css/lightbox.min.css" %}" rel="stylesheet">
 <style type="text/css">
-#lightbox .modal-content {
-    display: inline-block;
-    text-align: center;
-}
-#lightbox .close {
-    opacity: 1;
-    color: rgb(255, 255, 255);
-    background-color: rgb(25, 25, 25);
-    padding: 5px 8px;
-    border-radius: 30px;
-    border: 2px solid rgb(255, 255, 255);
-    position: absolute;
-    top: -15px;
-    right: -55px;
-    z-index:1032;
-}
     pre {
         background-color: transparent;
         /*border: none;*/
@@ -233,25 +218,16 @@
                         </div>
                         <div id="Attachments" class="panel-collapse collapse in" aria-labelledby="headingAttachments">
                             <div class="panel-body">
-                            <div class="row">
-                                {% for poc in finding.attachment_set.all %}
-                                <div class="col-xs-6 col-sm-3">
-                                    <a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox">
-                                    <img src="{% static poc.image.url %}" alt="{{ poc.image.title }}" class="img-responsive">
-                                    </a>
-                                </div>
-                                {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <button type="button" class="close hidden" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Modal title</h4>
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <img src="" alt="" />
+                                <div class="row">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <div class="row">
+                                            {% for poc in finding.attachment_set.all %}
+                                            <a href="{% static poc.image.url %}" data-toggle="lightbox" data-gallery="multiimages" data-title="{{ poc.title }}"  class="col-sm-4">
+                                            <img src="{% static poc.image.url %}" class="img-responsive">
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -266,27 +242,11 @@
 {% block extra_js %}
 <script src="{% static "js/highlight.pack.js" %}"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+<script src="{% static "js/lightbox.min.js" %}"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-    var $lightbox = $('#lightbox');
-    $('[data-target="#lightbox"]').on('click', function(event) {
-        var $img = $(this).find('img'),
-            src = $img.attr('src'),
-            alt = $img.attr('alt'),
-            css = {
-                'maxWidth': $(window).width() - 100,
-                'maxHeight': $(window).height() - 100
-            };
-        $lightbox.find('.close').addClass('hidden');
-        $lightbox.find('img').attr('src', src);
-        $lightbox.find('img').attr('alt', alt);
-        $lightbox.find('img').css(css);
-    });
-    $lightbox.on('shown.bs.modal', function (e) {
-        var $img = $lightbox.find('img');
-        $lightbox.find('.modal-dialog').css({'width': $img.width()});
-        $lightbox.find('.close').removeClass('hidden');
-    });
+$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
 });
 </script>
 {% endblock extra_js %}
