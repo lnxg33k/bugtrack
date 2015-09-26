@@ -34,7 +34,7 @@ def view_assessment(request, slug):
     findings = Finding.objects.filter(
         assessment=assessment).order_by('-risk')
 
-    paginator_findings = Paginator(findings, 5)
+    paginator_findings = Paginator(findings, 10)
     page = request.GET.get('fpage')
     try:
         findings_pag = paginator_findings.page(page)
