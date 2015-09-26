@@ -28,18 +28,18 @@
         {# {{ finding }} #}
         <div class="panel-group" id="accordion" aria-multiselectable="true">
             <div class="row" style="margin-bottom: 5px;">
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingIntroduction" data-toggle="collapse" data-parent="#accordion" data-target="#introduction">
+                        <div class="panel-heading" id="headingOverview" data-toggle="collapse" data-parent="#accordion" data-target="#Overview">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Introduction<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Overview<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="introduction" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
+                        <div id="Overview" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
                             <div class="panel-body">
-                                {{ assessment.introduction|safe }}
+                                {{ finding.overview|safe }}
                             </div>
                         </div>
                     </div>
@@ -60,79 +60,101 @@
                     </div>
                     {% endif %}
                 </div>
-                <div class="col-md-4">
-                    {% if assessment.stakeholders %}
+                <div class="col-md-5">
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingstakeholders" data-toggle="collapse" data-parent="#accordion" data-target="#stakeholders">
+                        <div class="panel-heading" id="headingStatus" data-toggle="collapse" data-parent="#accordion" data-target="#Status">
                             <h4 class="panel-title">
+                            {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
+                            <span class="label label-danger">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% elif finding.get_risk_display == 'Medium' %}
+                            <span class="label label-warning">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% else %}
+                            <span class="label label-info">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% endif %}
                             <a class="accordion-toggle">
-                            Stakeholders<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            <span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="stakeholders" class="panel-collapse collapse in" aria-labelledby="headingstakeholders">
+                        <div id="Status" class="panel-collapse collapse in" aria-labelledby="headingStatus">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        {% for stakeholder in assessment.stakeholders.all %}
-                                        {% if not stakeholder.is_staff %}
-                                        <span class="pull-left">{{ stakeholder.get_full_name|title }}</span>
-                                        <span class="pull-right"><a href="mailto:{{ stakeholder.email }}">{{ stakeholder.email }}</a></span><br />
+                                        <span class="pull-left">Fixed</span>
+                                        <span class="pull-right">
+                                        {% if finding.is_fixed %}
+                                        {% if finding.is_fix_verified %}
+                                        <span class="label label-success">Fixed and verfied</span>
+                                        {% else %}
+                                        <span class="label label-info">Waiting for verification</span>
                                         {% endif %}
-                                        {% endfor %}
+                                        {% else %}
+                                        <span class="label label-danger">No</span>
+                                        {% endif %}
+                                        </span>
+                                        {% if finding.is_fixed %}
+                                        <br />
+                                        <span class="pull-left">Fixed by</span>
+                                        <span class="pull-right">{{ finding.fixed_by.get_full_name|title }}</span><br />
+                                        <span class="pull-left">Fix date</span>
+                                        <span class="pull-right">{{ finding.fix_date }}</span><br />
+                                        {% endif %}
                                     </div>
-                                    {# <div class="col-md-12" style="margin-top: 5px;"> #}
-                                        {# <button class="btn btn-primary btn-xs pull-right">Add</button> #}
-                                    {# </div> #}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% endif %}
-                    {% if assessment.scope %}
+                    {% if finding.impact %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingScope" data-toggle="collapse" data-parent="#accordion" data-target="#Scope">
+                        <div class="panel-heading" id="headingRisk" data-toggle="collapse" data-parent="#accordion" data-target="#Risk">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Scope<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Impact<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="Scope" class="panel-collapse collapse in" aria-labelledby="headingScope">
+                        <div id="Risk" class="panel-collapse collapse in" aria-labelledby="headingRisk">
                             <div class="panel-body">
-                                {{ assessment.scope|safe }}
+                                {{ finding.impact|safe }}
                             </div>
                         </div>
                     </div>
                     {% endif %}
-                    {% if assessment.methodology %}
+                    {% if finding.recommendation %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingMethodology" data-toggle="collapse" data-parent="#accordion" data-target="#Methodology">
+                        <div class="panel-heading" id="headingRecommendation" data-toggle="collapse" data-parent="#accordion" data-target="#Recommendation">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Methodology<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Recommendation<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="Methodology" class="panel-collapse collapse" aria-labelledby="headingMethodology">
+                        <div id="Recommendation" class="panel-collapse collapse in" aria-labelledby="headingRecommendation">
                             <div class="panel-body">
-                                {{ assessment.methodology|safe }}
+                                {{ finding.recommendation|safe }}
                             </div>
                         </div>
                     </div>
                     {% endif %}
-                    {% if assessment.caveats %}
+                    {% if finding.references.all %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingCaveats" data-toggle="collapse" data-parent="#accordion" data-target="#Caveats">
+                        <div class="panel-heading" id="headingReferences" data-toggle="collapse" data-parent="#accordion" data-target="#References">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Caveats<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            References<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="Caveats" class="panel-collapse collapse" aria-labelledby="headingCaveats">
+                        <div id="References" class="panel-collapse collapse in" aria-labelledby="headingReferences">
                             <div class="panel-body">
-                                {{ assessment.caveats|safe }}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for reference in finding.references.all %}
+                                        <span class="pull-left">{{ reference.name }}</span>
+                                        <span class="pull-right">{{ reference.url|urlize|truncatewords_html:5 }}</span><br />
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
