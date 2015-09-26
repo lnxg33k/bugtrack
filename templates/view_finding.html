@@ -36,12 +36,51 @@
                             </a>
                             </h4>
                         </div>
-                        <div id="Overview" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
+                        <div id="Overview" class="panel-collapse collapse in" aria-labelledby="headingOverview">
                             <div class="panel-body">
                                 {{ finding.overview|safe }}
                             </div>
                         </div>
                     </div>
+                    {% if finding.recommendation %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingRecommendation" data-toggle="collapse" data-parent="#accordion" data-target="#Recommendation">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Recommendation<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Recommendation" class="panel-collapse collapse in" aria-labelledby="headingRecommendation">
+                            <div class="panel-body">
+                                {{ finding.recommendation|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.references.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingReferences" data-toggle="collapse" data-parent="#accordion" data-target="#References">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            References<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="References" class="panel-collapse collapse in" aria-labelledby="headingReferences">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for reference in finding.references.all %}
+                                        <span class="pull-left">{{ reference.name }}</span>
+                                        <span class="pull-right">{{ reference.url|urlize|truncatewords_html:5 }}</span><br />
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                     {% if assessment.summary %}
                     <div class="panel panel-default">
                         <div class="panel-heading" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
@@ -119,41 +158,34 @@
                         </div>
                     </div>
                     {% endif %}
-                    {% if finding.recommendation %}
+                    {% if finding.instance %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingRecommendation" data-toggle="collapse" data-parent="#accordion" data-target="#Recommendation">
+                        <div class="panel-heading" id="headingInstance" data-toggle="collapse" data-parent="#accordion" data-target="#Instance">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Recommendation<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Affected instances<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="Recommendation" class="panel-collapse collapse in" aria-labelledby="headingRecommendation">
+                        <div id="Instance" class="panel-collapse collapse in" aria-labelledby="headingInstance">
                             <div class="panel-body">
-                                {{ finding.recommendation|safe }}
+                                {{ finding.instance|safe }}
                             </div>
                         </div>
                     </div>
                     {% endif %}
-                    {% if finding.references.all %}
+                    {% if finding.url %}
                     <div class="panel panel-default">
-                        <div class="panel-heading" id="headingReferences" data-toggle="collapse" data-parent="#accordion" data-target="#References">
+                        <div class="panel-heading" id="headingUrl" data-toggle="collapse" data-parent="#accordion" data-target="#Url">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            References<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Demonostration URLs<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
-                        <div id="References" class="panel-collapse collapse in" aria-labelledby="headingReferences">
+                        <div id="Url" class="panel-collapse collapse in" aria-labelledby="headingUrl">
                             <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        {% for reference in finding.references.all %}
-                                        <span class="pull-left">{{ reference.name }}</span>
-                                        <span class="pull-right">{{ reference.url|urlize|truncatewords_html:5 }}</span><br />
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                {{ finding.url|safe }}
                             </div>
                         </div>
                     </div>
