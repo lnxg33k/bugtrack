@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.template.defaultfilters import truncatechars
+from PIL import Image as Img
+import StringIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 class Stakeholder(User):
@@ -99,6 +102,19 @@ class Attachment(models.Model):
 
     def __str__(self):
         return "%s" % self.title
+
+    def save(self, *args, **kwargs):
+            if self.image:
+                image = Img.open(StringIO.StringIO(self.image.read()))
+                image = image.convert("RGBA")
+                image.thumbnail((1000, 1000), Img.ANTIALIAS)
+                output = StringIO.StringIO()
+                image.save(output, format='JPEG', quality=100)
+                output.seek(0)
+                self.image = InMemoryUploadedFile(
+                    output, 'ImageField', "%s.jpg" % self.image.name,
+                    'image/jpeg', output.len, None)
+            super(Attachment, self).save(*args, **kwargs)
 
 
 class Comment(models.Model):
