@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% load i18n %}
+{% block title %}Finding ({{ finding }}){% endblock %}
+{% block extra_css %}
+<link href="{% static "css/tomorrow.css" %}" rel="stylesheet">
+<link href="{% static "css/lightbox.min.css" %}" rel="stylesheet">
+<style type="text/css">
+    pre {
+        background-color: transparent;
+        /*border: none;*/
+    }
+    .tab-content {
+        padding-top: 15px;
+    }
+    .panel-heading {
+        cursor: pointer;
+    }
+</style>
+{% endblock extra_css %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment }}</a></li>
+            <li class="active">{{ finding }}</li>
+        </ol>
+        <div class="panel-group" id="accordion" aria-multiselectable="true">
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-7">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingOverview" data-toggle="collapse" data-parent="#accordion" data-target="#Overview">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Overview<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Overview" class="panel-collapse collapse in" aria-labelledby="headingOverview">
+                            <div class="panel-body">
+                                {{ finding.overview|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% if finding.recommendation %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingRecommendation" data-toggle="collapse" data-parent="#accordion" data-target="#Recommendation">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Recommendation<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Recommendation" class="panel-collapse collapse in" aria-labelledby="headingRecommendation">
+                            <div class="panel-body">
+                                {{ finding.recommendation|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.references.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingReferences" data-toggle="collapse" data-parent="#accordion" data-target="#References">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            References<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="References" class="panel-collapse collapse in" aria-labelledby="headingReferences">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% for reference in finding.references.all %}
+                                        <span class="pull-left">{{ reference.name }}</span>
+                                        <span class="pull-right">{{ reference.url|urlize|truncatewords_html:5 }}</span><br />
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% comment %}
+                    {% if assessment.summary %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Summary<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="summary" class="panel-collapse collapse in" aria-labelledby="headingSummary">
+                            <div class="panel-body">
+                                {{ assessment.summary|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endcomment %}
+                </div>
+                <div class="col-md-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingStatus" data-toggle="collapse" data-parent="#accordion" data-target="#Status">
+                            <h4 class="panel-title">
+                            {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
+                            <span class="label label-danger">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% elif finding.get_risk_display == 'Medium' %}
+                            <span class="label label-warning">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% else %}
+                            <span class="label label-info">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
+                            {% endif %}
+                            <a class="accordion-toggle">
+                            <span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Status" class="panel-collapse collapse in" aria-labelledby="headingStatus">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="pull-left">Fixed</span>
+                                        <span class="pull-right">
+                                        {% if finding.is_fixed %}
+                                        {% if finding.is_fix_verified %}
+                                        <span class="label label-success">Fixed and verfied</span>
+                                        {% else %}
+                                        <span class="label label-info">Waiting for verification</span>
+                                        {% endif %}
+                                        {% else %}
+                                        <span class="label label-danger">No</span>
+                                        {% endif %}
+                                        </span>
+                                        {% if finding.is_fixed %}
+                                        <br />
+                                        <span class="pull-left">Fixed by</span>
+                                        <span class="pull-right">{{ finding.fixed_by.get_full_name|title }}</span><br />
+                                        <span class="pull-left">Fix date</span>
+                                        <span class="pull-right">{{ finding.fix_date }}</span><br />
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if finding.impact %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingRisk" data-toggle="collapse" data-parent="#accordion" data-target="#Risk">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Impact<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Risk" class="panel-collapse collapse in" aria-labelledby="headingRisk">
+                            <div class="panel-body">
+                                {{ finding.impact|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.instance_set.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingInstance" data-toggle="collapse" data-parent="#accordion" data-target="#Instance">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Demonostration Instances<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Instance" class="panel-collapse collapse in" aria-labelledby="headingInstance">
+                            <div class="panel-body">
+                                <ul class="list-unstyled">
+                                    {% for instance in finding.instance_set.all %}
+                                    <li>{{instance|truncatewords:10 }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.url_set.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingUrl" data-toggle="collapse" data-parent="#accordion" data-target="#Url">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Demonostration URLs<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Url" class="panel-collapse collapse in" aria-labelledby="headingUrl">
+                            <div class="panel-body">
+                                <ul class="list-unstyled">
+                                    {% for url in finding.url_set.all %}
+                                    <li>{{ url|urlize|truncatewords_html:10 }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.conditions %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingConditions" data-toggle="collapse" data-parent="#accordion" data-target="#Conditions">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Conditions<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Conditions" class="panel-collapse collapse in" aria-labelledby="headingConditions">
+                            <div class="panel-body">
+                                {{ finding.conditions|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if finding.attachment_set.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingAttachments" data-toggle="collapse" data-parent="#accordion" data-target="#Attachments">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            POCs<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Attachments" class="panel-collapse collapse in" aria-labelledby="headingAttachments">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-offset-2 col-md-8">
+                                        <div class="row">
+                                            {% for poc in finding.attachment_set.all %}
+                                            <a href="{% static poc.image.url %}" data-toggle="lightbox" data-gallery="multiimages" data-title="{{ poc.title }}"  class="col-sm-4">
+                                            <img src="{% static poc.image.url %}" class="img-responsive">
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static "js/highlight.pack.js" %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="{% static "js/lightbox.min.js" %}"></script>
+<script type="text/javascript">
+$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
+});
+</script>
+{% endblock extra_js %}
