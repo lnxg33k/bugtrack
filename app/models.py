@@ -90,6 +90,30 @@ class Reference(models.Model):
         return "%s" % self.name
 
 
+class Url(models.Model):
+    finding = models.ForeignKey('Finding', null=True, blank=True)
+    url = models.URLField()
+
+    class Meta:
+        verbose_name = "URL"
+        verbose_name_plural = "Affected URLs"
+
+    def __str__(self):
+        return self.url
+
+
+class Instance(models.Model):
+    finding = models.ForeignKey('Finding', null=True, blank=True)
+    instance = models.CharField('Instance', max_length=250)
+
+    class Meta:
+        verbose_name = "Instance"
+        verbose_name_plural = "Affected Instances"
+
+    def __str__(self):
+        return self.instance
+
+
 class Attachment(models.Model):
     finding = models.ForeignKey('Finding', null=True, blank=True)
     image = models.ImageField(
@@ -157,6 +181,7 @@ class Finding(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
     risk = models.CharField("Risk", max_length=50, choices=risk_choices)
     is_fixed = models.BooleanField(default=False)
+    fix_message = models.TextField(blank=True, null=True)
     is_fix_verified = models.BooleanField(default=False)
     fix_date = models.DateTimeField(blank=True, null=True)
     fixed_by = models.ForeignKey(Stakeholder, null=True, blank=True)
@@ -167,8 +192,8 @@ class Finding(models.Model):
     conditions = models.TextField(null=True, blank=True)
     impact = models.TextField(null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
-    instance = models.TextField("Instances", null=True, blank=True)
-    url = models.TextField("Demonstration URLs", null=True, blank=True)
+    # instance = models.TextField("Instances", null=True, blank=True)
+    # url = models.TextField("Demonstration URLs", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

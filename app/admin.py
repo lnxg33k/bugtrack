@@ -7,11 +7,26 @@ from ckeditor.widgets import CKEditorWidget
 from django.template.defaultfilters import truncatewords_html
 from app.forms import StakeholderForm
 from app.models import (
-    Assessment, Finding, Reference, Attachment, Stakeholder, Comment)
+    Assessment, Finding, Reference, Attachment,
+    Stakeholder, Comment, Url, Instance)
 
 
 class AttachmentInline(admin.StackedInline):
     model = Attachment
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
+    extra = 1
+
+
+class UrlInline(admin.StackedInline):
+    model = Url
+    classes = ('grp-collapse grp-closed',)
+    inline_classes = ('grp-collapse grp-open',)
+    extra = 1
+
+
+class InstanceInline(admin.StackedInline):
+    model = Instance
     classes = ('grp-collapse grp-closed',)
     inline_classes = ('grp-collapse grp-open',)
     extra = 1
@@ -197,12 +212,16 @@ class FindingAdmin(admin.ModelAdmin):
             'classes': ('grp-collapse grp-closed',),
             'fields': ('risk', 'cvssv2', 'impact')
         }),
-        ('Infected instances and URLs', {
-            'classes': ('grp-collapse grp-closed',),
-            'fields': ('instance', 'url')
-        }),
         ("Attachment Inline", {
             "classes": ("placeholder attachment_set-group",),
+            "fields": ()
+        }),
+        ('Affected URLs', {
+            "classes": ("placeholder url_set-group",),
+            "fields": ()
+        }),
+        ('Affected Instances', {
+            "classes": ("placeholder instance_set-group",),
             "fields": ()
         }),
         ('Recommendations', {
@@ -219,7 +238,7 @@ class FindingAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [
-        AttachmentInline, CommentInline
+        AttachmentInline, CommentInline, UrlInline, InstanceInline
     ]
 
     def make_published(self, request, queryset):
