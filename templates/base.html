@@ -8,6 +8,7 @@
         <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <link href="{% static "css/open-sans.css" %}" rel="stylesheet">
+        <link href="{% static "css/scrollToTop.css" %}" rel="stylesheet">
         <link href="{% static "fonts/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
         {# <link href="{% static "css/hovernav.css" %}" rel="stylesheet"> #}
         {% block extra_css %}
@@ -15,7 +16,6 @@
     </head>
     <body>
         <!-- Fixed navbar -->
-        {# <h1>{{ request.resolver_match.url_name }}</h1> #}
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -35,9 +35,6 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <div class="btn-group navbar-btn">
-                                {# <a class="btn btn-primary" href="#"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|capfirst }}{% else %}{{ user }}{% endif %}</a> #}
-                                {# <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"> #}
-                                {# <span class="fa fa-caret-down"></span></a> #}
                                 <button class="btn btn-primary"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|title }}{% else %}{{ user }}{% endif %}</button>
                                 <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><span class="caret"></span></button>
                                 <ul class="dropdown-menu">
@@ -76,11 +73,17 @@
                 </div>
             </nav>
             <div class="container">
+                <div class="scroll-top-wrapper ">
+                    <span class="scroll-top-inner">
+                    <i class="fa fa-2x fa-arrow-circle-up"></i>
+                    </span>
+                </div>
                 {% block content %}
                 {% endblock %}
             </div>
             <script src="{% static "js/jquery.min.js" %}"></script>
             <script src="{% static "js/bootstrap.min.js" %}"></script>
+            <script src="{% static "js/scrollToTop.js" %}"></script>
             {# // <script src="{% static "js/hovernav.js" %}"></script> #}
             {% block extra_js %}
             {% endblock extra_js %}
