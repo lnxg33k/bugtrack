@@ -161,9 +161,10 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
+        ordering = ["-created_at"]
 
     def __str__(self):
-        return "%s" % truncatechars(self.comment, 100)
+        return "%s" % self.comment
 
 
 class Finding(models.Model):
