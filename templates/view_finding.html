@@ -19,6 +19,9 @@
     .breadcrumb > li + li.pull-right::before {
         content: none;
 }
+    .panel-footer {
+        background-color: white !important;
+    }
 </style>
 {% endblock extra_css %}
 {% block content %}
@@ -235,6 +238,70 @@
                         </div>
                     </div>
                     {% endif %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" id="headingComments" data-toggle="collapse" data-parent="#accordion" data-target="#Comments">
+                            <h4 class="panel-title">
+                            <a class="accordion-toggle">
+                            Comments<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            </a>
+                            </h4>
+                        </div>
+                        <div id="Comments" class="panel-collapse collapse in" aria-labelledby="headingComments">
+                            <div class="panel-body">
+                                {% for comment in finding.comment_set.all %}
+                                {# {{ comment.created_at|date:"u" }}<br /> #}
+                                {% if not comment.parent %}
+                                <div class="panel panel-info">
+                                    <div class="panel-heading" style="cursor: default;">
+                                        <small>{{ comment.commenter.get_full_name }} | {{ comment.created_at }}</small>
+                                    </div>
+                                    <div class="panel-body">
+                                        {{ comment }}
+                                        {% if comment.replies.all %}
+                                        {% for reply in comment.replies.all %}
+                                        <hr style="margin: 5px -5px;">
+                                        <div style="margin-left: 20px">
+                                            <span>{{ reply }}</span>
+                                            <span><small class="pull-right">{{ reply.commenter.get_full_name }} | {{ reply.created_at }}</small></span>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        {% endfor %}
+                                        {# <hr style="margin: 5px -5px;"> #}
+                                        {% endif %}
+                                    </div>
+                                    <div class="panel-footer">
+                                        <span class="pull-right">
+                                        <a  data-toggle="collapse" href="#collapseReply{{ comment.created_at|date:"u" }}" aria-expanded="false" aria-controls="collapseExample">
+                                        <i class="fa fa-comment"></i> add a comment
+                                        </a>
+                                        </span>
+                                        {# <button class="btn btn-primary btn-xs">Reply</button> #}
+                                        <div class="clearfix"></div>
+                                        <div class="collapse" id="collapseReply{{ comment.created_at|date:"u" }}">
+                                            <form action="{% url "replayOnComment" finding.id comment.id %}" method="POST" style="margin-top: 5px;">{% csrf_token %}
+                                                <div class="form-group">
+                                                    <textarea cols="40" id="id_comment" name="comment" class="form-control" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                                <div class="clearfix"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                <div style="padding-top: 10px">
+                                    <h4>Your Comment</h4>
+                                    <form action="{% url "comment" finding.id %}" method="POST">{% csrf_token %}
+                                        <div class="form-group">
+                                            <textarea cols="40" id="id_comment" name="comment" rows="10" class="form-control" required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
