@@ -72,7 +72,6 @@ def add_comment(request, finding_id, parent_id=None):
         stakeholder = Stakeholder.objects.get(username=request.user)
         finding = get_object_or_404(
             Finding, pk=finding_id, assessment__stakeholders=stakeholder)
-        print 'passed'
         comment = Comment(
             finding=finding, commenter=stakeholder,
             parent_id=parent_id)
