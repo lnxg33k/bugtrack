@@ -3,6 +3,16 @@
 {% load i18n %}
 {% block title %}Finding ({{ finding }}){% endblock %}
 {% block extra_css %}
+<style type="text/css">
+    .captcha {
+    width: 100px;
+    height: 30px;
+}
+#id_captcha_1 {
+    width: 55%;
+    height: 30px
+}
+</style>
 <link href="{% static "css/tomorrow.css" %}" rel="stylesheet">
 <link href="{% static "css/lightbox.min.css" %}" rel="stylesheet">
 <style type="text/css">
@@ -53,7 +63,7 @@
                 <span class="label label-warning"> Fix is not verified.</span>
                 {% endif %}
                 {% else %}
-                <span class="label label-primary btn" data-toggle="modal" data-target=".bs-example-modal-lg">Was not fixed!. Press to set as fixed</span>
+                <span class="btn btn-link" data-toggle="modal" data-target=".bs-example-modal-lg">Was not fixed!. Press to set as fixed</span>
                 {# </small> #}
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                     <div class="modal-dialog modal-lg">
@@ -266,23 +276,25 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         {% endfor %}
-                                        {# <hr style="margin: 5px -5px;"> #}
                                         {% endif %}
                                     </div>
                                     <div class="panel-footer">
+                                        <hr style="margin: 5px -5px;">
                                         <span class="pull-right">
                                         <a  data-toggle="collapse" href="#collapseReply{{ comment.created_at|date:"u" }}" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="fa fa-comment"></i> add a comment
+                                        <i class="fa fa-comment"></i> Reply
                                         </a>
                                         </span>
-                                        {# <button class="btn btn-primary btn-xs">Reply</button> #}
                                         <div class="clearfix"></div>
                                         <div class="collapse" id="collapseReply{{ comment.created_at|date:"u" }}">
                                             <form action="{% url "replayOnComment" finding.id comment.id %}" method="POST" style="margin-top: 5px;">{% csrf_token %}
                                                 <div class="form-group">
                                                     <textarea cols="40" id="id_comment" name="comment" class="form-control" required></textarea>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                                <div class="form-group">
+                                                    {{ comment_form.captcha }} <a href="#" class='btn btn-primary btn-sm captcha-refresh' style=""><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
+                                                    <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                                </div>
                                                 <div class="clearfix"></div>
                                             </form>
                                         </div>
@@ -293,10 +305,14 @@
                                 <div style="padding-top: 10px">
                                     <h4>Your Comment</h4>
                                     <form action="{% url "comment" finding.id %}" method="POST">{% csrf_token %}
+                                        {# {{ comment_form }} #}
                                         <div class="form-group">
                                             <textarea cols="40" id="id_comment" name="comment" rows="10" class="form-control" required></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                        <div class="form-group">
+                                            {{ comment_form.captcha }} <a href="#" class='btn btn-primary btn-sm captcha-refresh' style=""><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
+                                            <button type="submit" class="btn btn-primary pull-right">Comment</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -316,6 +332,29 @@
 $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
+});
+</script>
+<script type="text/javascript">
+            var ele = document.getElementsByName('captcha_1');
+            for (var i = ele.length - 1; i >= 0; i--) {
+                ele[i].setAttribute("required", true);
+                // ele[i].setAttribute("class", "form-control");
+            };
+</script>
+<script type="text/javascript">
+$(function() {
+    // Click-handler for the refresh-link
+    $('.captcha-refresh').click(function(){
+        var $form = $(this).parents('form');
+        var url = location.protocol + "//" + window.location.hostname + ":"
+                + location.port + "/captcha/refresh/";
+        // Make the AJAX-call
+        $.getJSON(url, {}, function(json) {
+            $form.find('input[name="captcha_0"]').val(json.key);
+            $form.find('img.captcha').attr('src', json.image_url);
+        });
+        return false;
+    });
 });
 </script>
 {% endblock extra_js %}
