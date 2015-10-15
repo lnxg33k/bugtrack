@@ -3,6 +3,7 @@ from django.utils.translation import string_concat
 from django.core.urlresolvers import reverse_lazy
 from django import forms
 from django.forms import ModelForm
+from captcha.fields import CaptchaField
 from app.models import Stakeholder, Comment
 
 
@@ -25,7 +26,9 @@ class StakeholderForm(UserChangeForm):
 
 
 class CommentForm(forms.ModelForm):
+    captcha = CaptchaField(required=True)
+
     class Meta:
         model = Comment
         # fields = "__all__"
-        fields = ["comment"]
+        fields = ["comment",]
