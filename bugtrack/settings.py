@@ -151,4 +151,10 @@ if DEBUG:
 CAPTCHA_OUTPUT_FORMAT = u'%(hidden_field)s%(image)s %(text_field)s'
 
 LOGIN_REDIRECT_URL = '/'
-AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
+AUTHENTICATION_BACKENDS = [
+    'django-dual-authentication.backends.DualAuthentication'
+    ]
+
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
+CAPTCHA_LETTER_ROTATION = None
