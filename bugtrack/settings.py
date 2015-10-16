@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'captcha',
     'preventconcurrentlogins',
     'django-dual-authentication',
+    'rest_framework',
+    'admin_dashboard',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -151,6 +153,7 @@ if DEBUG:
 CAPTCHA_OUTPUT_FORMAT = u'%(hidden_field)s%(image)s %(text_field)s'
 
 LOGIN_REDIRECT_URL = '/'
+
 AUTHENTICATION_BACKENDS = [
     'django-dual-authentication.backends.DualAuthentication'
     ]
@@ -158,3 +161,10 @@ AUTHENTICATION_BACKENDS = [
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
 CAPTCHA_LETTER_ROTATION = None
+
+# REST framework configurations
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
