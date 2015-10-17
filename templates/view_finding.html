@@ -4,6 +4,42 @@
 {% block title %}Finding ({{ finding }}){% endblock %}
 {% block extra_css %}
 <style type="text/css">
+    /* Custom Styles */
+    ul.nav-tabs{
+        width: 170px;
+        margin-top: 52px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    }
+    ul.nav-tabs li{
+        margin: 0;
+        border-top: 1px solid #ddd;
+    }
+    ul.nav-tabs li:first-child{
+        border-top: none;
+    }
+    ul.nav-tabs li a{
+        margin: 0;
+        padding: 8px 16px;
+        border-radius: 0;
+    }
+    ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover{
+        color: #fff;
+        background: #0088cc;
+        border: 1px solid #0088cc;
+    }
+    ul.nav-tabs li:first-child a{
+        border-radius: 4px 4px 0 0;
+    }
+    ul.nav-tabs li:last-child a{
+        border-radius: 0 0 4px 4px;
+    }
+  ul.nav-tabs.affix{
+        top: 30px; /* Set the top position of pinned element*/
+    }
+</style>
+<style type="text/css">
     .captcha {
     width: 100px;
     height: 30px;
@@ -36,18 +72,33 @@
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-2 hidden-sm" id="myScrollspy">
+        <ul class="nav nav-tabs nav-stacked" id="myNav">
+            <li class="active"><a href="#headingOverview">Overview</a></li>
+            {% if finding.impact %}<li><a href="#headingRisk">Impact</a></li>{% endif %}
+            {% if finding.instance_set.all %}<li><a href="#headingInstance">Infected Instances</a></li>{% endif %}
+            {% if finding.url_set.all %}<li><a href="#headingUrl">Infected URLs</a></li>{% endif %}
+            {% if finding.attachment_set.all %}<li><a href="#headingAttachments">POCs</a></li>{% endif %}
+            {% if finding.conditions %}<li><a href="#headingConditions">Conditions</a></li>{% endif %}
+            {% if finding.recommendation %}<li><a href="#headingRecommendation">Recommendation</a></li>{% endif %}
+            {% if finding.references.all %}<li><a href="#headingReferences">References</a></li>{% endif %}
+            <li><a href="#headingComments">Comments</a></li>
+        </ul>
+    </div>
+    <div class="col-md-10">
         <div class="row">
             <div class="col-md-7">
+                <small>
                 <ol class="breadcrumb">
                     <li><a href="/">Assessments</a></li>
-                    <li><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment }}</a></li>
+                    <li><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment|truncatewords:4 }}</a></li>
                     <li><a href="{% url "assessment_detail" assessment.slug %}?fpage=1">Findings</a></li>
-                    <li class="active">{{ finding }}</li>
+                    <li class="active">{{ finding|truncatewords:3 }}</li>
                 </ol>
+                </small>
             </div>
             <div class="col-md-5" style="padding-top: 8px;">
-                {# <small> #}
+                <small>
                 {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
                 <span class="label label-danger">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
                 {% elif finding.get_risk_display == 'Medium' %}
@@ -63,8 +114,8 @@
                 <span class="label label-warning"> Fix is not verified.</span>
                 {% endif %}
                 {% else %}
-                <span class="btn btn-link" data-toggle="modal" data-target=".bs-example-modal-lg">Was not fixed!. Press to set as fixed</span>
-                {# </small> #}
+                <span class="btn btn-link btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg">Was not fixed!. Press to set as fixed</span>
+                </small>
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -132,7 +183,7 @@
                         <div class="panel-heading" id="headingInstance" data-toggle="collapse" data-parent="#accordion" data-target="#Instance">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Demonostration Instances<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Infected Instances<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
@@ -152,7 +203,7 @@
                         <div class="panel-heading" id="headingUrl" data-toggle="collapse" data-parent="#accordion" data-target="#Url">
                             <h4 class="panel-title">
                             <a class="accordion-toggle">
-                            Demonostration URLs<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                            Infected URLs<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
                             </a>
                             </h4>
                         </div>
@@ -329,6 +380,15 @@
 <script>hljs.initHighlightingOnLoad();</script>
 <script src="{% static "js/lightbox.min.js" %}"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+    $("#myNav").affix({
+        offset: {
+            top: 195
+        }
+    });
+});
+</script>
+<script type="text/javascript">
 $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
@@ -356,5 +416,21 @@ $(function() {
         return false;
     });
 });
+</script>
+<script type="text/javascript">
+window.onhashchange  = function(){
+    var currentScrollId = window.location.hash.substring(1);
+    if (currentScrollId) {
+        console.log("got currentScrollId: " + currentScrollId);
+        var collapsedDiv = document.getElementById(currentScrollId.split("heading")[1])
+        console.log("got collapsedDiv: " + collapsedDiv.id);
+        if (collapsedDiv.className.indexOf("collapse in") < 0) {
+            $("#" + collapsedDiv.id).collapse({
+                toggle: false
+            })
+            $("#" + collapsedDiv.id).collapse('show');
+        };
+    };
+};
 </script>
 {% endblock extra_js %}
