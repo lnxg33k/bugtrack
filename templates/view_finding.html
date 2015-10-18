@@ -7,7 +7,7 @@
     /* Custom Styles */
     ul.nav-tabs{
         width: 170px;
-        margin-top: 52px;
+        margin-top: 150px;
         border-radius: 4px;
         border: 1px solid #ddd;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
@@ -35,7 +35,7 @@
     ul.nav-tabs li:last-child a{
         border-radius: 0 0 4px 4px;
     }
-  ul.nav-tabs.affix{
+ul.nav-tabs.affix{
         top: 30px; /* Set the top position of pinned element*/
     }
 </style>
@@ -72,19 +72,6 @@
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
-    <div class="col-md-2 hidden-sm" id="myScrollspy">
-        <ul class="nav nav-tabs nav-stacked" id="myNav">
-            <li class="active"><a href="#headingOverview">Overview</a></li>
-            {% if finding.impact %}<li><a href="#headingRisk">Impact</a></li>{% endif %}
-            {% if finding.instance_set.all %}<li><a href="#headingInstance">Infected Instances</a></li>{% endif %}
-            {% if finding.url_set.all %}<li><a href="#headingUrl">Infected URLs</a></li>{% endif %}
-            {% if finding.attachment_set.all %}<li><a href="#headingAttachments">POCs</a></li>{% endif %}
-            {% if finding.conditions %}<li><a href="#headingConditions">Conditions</a></li>{% endif %}
-            {% if finding.recommendation %}<li><a href="#headingRecommendation">Recommendation</a></li>{% endif %}
-            {% if finding.references.all %}<li><a href="#headingReferences">References</a></li>{% endif %}
-            <li><a href="#headingComments">Comments</a></li>
-        </ul>
-    </div>
     <div class="col-md-10">
         <div class="row">
             <div class="col-md-7">
@@ -372,6 +359,19 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-md-2 hidden-sm" id="myScrollspy">
+        <ul class="nav nav-tabs nav-stacked" id="myNav">
+            <li class="active"><a href="#headingOverview">Overview</a></li>
+            {% if finding.impact %}<li><a href="#headingRisk">Impact</a></li>{% endif %}
+            {% if finding.instance_set.all %}<li><a href="#headingInstance">Infected Instances</a></li>{% endif %}
+            {% if finding.url_set.all %}<li><a href="#headingUrl">Infected URLs</a></li>{% endif %}
+            {% if finding.attachment_set.all %}<li><a href="#headingAttachments">POCs</a></li>{% endif %}
+            {% if finding.conditions %}<li><a href="#headingConditions">Conditions</a></li>{% endif %}
+            {% if finding.recommendation %}<li><a href="#headingRecommendation">Recommendation</a></li>{% endif %}
+            {% if finding.references.all %}<li><a href="#headingReferences">References</a></li>{% endif %}
+            <li><a href="#headingComments">Comments</a></li>
+        </ul>
     </div>
 </div>
 {% endblock %}
