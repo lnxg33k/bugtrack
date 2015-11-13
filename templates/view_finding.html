@@ -7,7 +7,7 @@
     /* Custom Styles */
     ul.nav-tabs{
         width: 170px;
-        margin-top: 150px;
+        margin-top: 140px;
         border-radius: 4px;
         border: 1px solid #ddd;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
@@ -85,7 +85,7 @@ ul.nav-tabs.affix{
                 </small>
             </div>
             <div class="col-md-5" style="padding-top: 8px;">
-                <small>
+                {# <small> #}
                 {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
                 <span class="label label-danger">{{ finding.get_risk_display|capfirst }}{% if finding.cvssv2 %} - {{ finding.cvssv2 }}{% endif %}</span>
                 {% elif finding.get_risk_display == 'Medium' %}
@@ -102,7 +102,7 @@ ul.nav-tabs.affix{
                 {% endif %}
                 {% else %}
                 <span class="btn btn-link btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg">Was not fixed!. Press to set as fixed</span>
-                </small>
+                {# </small> #}
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -421,9 +421,9 @@ $(function() {
 window.onhashchange  = function(){
     var currentScrollId = window.location.hash.substring(1);
     if (currentScrollId) {
-        console.log("got currentScrollId: " + currentScrollId);
+        // console.log("got currentScrollId: " + currentScrollId);
         var collapsedDiv = document.getElementById(currentScrollId.split("heading")[1])
-        console.log("got collapsedDiv: " + collapsedDiv.id);
+        // console.log("got collapsedDiv: " + collapsedDiv.id);
         if (collapsedDiv.className.indexOf("collapse in") < 0) {
             $("#" + collapsedDiv.id).collapse({
                 toggle: false
@@ -432,5 +432,19 @@ window.onhashchange  = function(){
         };
     };
 };
+</script>
+<script type="text/javascript">
+$(function(){
+    $('#navbar').on('affixed', function () {
+        console.log("affixed");
+        // $('#navbar').addClass('navbar-fixed-top')
+    });
+
+    $('#navbar').on('unaffixed', function () {
+                console.log("unaffixed");
+
+        // $('#navbar').removeClass('navbar-fixed-top')
+    });
+});
 </script>
 {% endblock extra_js %}
