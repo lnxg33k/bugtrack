@@ -10,19 +10,23 @@ from app.models import Stakeholder, Comment
 class StakeholderForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super(UserChangeForm, self).__init__(*args, **kwargs)
-        username = self.initial['username']
-        user_id = Stakeholder.objects.get(username=username).pk
-        # print dir(x)
-        # print self.auto_id
-        # print dir(self)
-        # print dir(self.Meta)
-        self.fields['password'].help_text = string_concat("Raw passwords are not stored, so there is no way to see ",
-                "this user's password, but you can change the password ",
-                "using <a href=\"",reverse_lazy("admin:auth_user_change", args=(user_id, )),"password\">this form</a>.")
+        username = self.initial.get('username')
+        if username:
+            user_id = Stakeholder.objects.get(username=username).pk
+            # print dir(x)
+            # print self.auto_id
+            # print dir(self)
+            # print dir(self.Meta)
+            self.fields['password'].help_text = string_concat("Raw passwords are not stored, so there is no way to see ",
+                    "this user's password, but you can change the password ",
+                    "using <a href=\"",reverse_lazy("admin:auth_user_change", args=(user_id, )),"password\">this form</a>.")
 
     class Meta:
         model = Stakeholder
         fields = "__all__"
+
+    def clean_password(self):
+        return ""
 
 
 class CommentForm(forms.ModelForm):
