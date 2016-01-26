@@ -17,7 +17,7 @@
     <body data-spy="scroll" data-target="#myScrollspy">
         <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -32,7 +32,7 @@
                         <li class="active"><a href="{% url "profile" %}"><i class="fa fa-home fa-fw"></i>&nbsp;Home</a></li>
                     </ul>
                     {% if user.is_authenticated %}
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right" style="margin: 0px;">
                         <li>
                             <div class="btn-group navbar-btn">
                                 <button class="btn btn-primary"><i class="fa fa-user fa-fw"></i> {% if user.get_full_name %}{{ user.get_full_name|title }}{% else %}{{ user }}{% endif %}</button>
@@ -72,7 +72,7 @@
                     </div><!--/.nav-collapse -->
                 </div>
             </nav>
-            <div class="container">
+            <div class="container-fluid">
                 <div class="scroll-top-wrapper ">
                     <span class="scroll-top-inner">
                     <i class="fa fa-2x fa-arrow-circle-up"></i>
