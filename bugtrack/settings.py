@@ -158,9 +158,9 @@ AUTHENTICATION_BACKENDS = [
     'django-dual-authentication.backends.DualAuthentication'
     ]
 
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
-CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
-CAPTCHA_LETTER_ROTATION = None
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+# CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
+# CAPTCHA_LETTER_ROTATION = None
 
 # REST framework configurations
 REST_FRAMEWORK = {
