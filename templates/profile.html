@@ -26,7 +26,7 @@
                     {% if assessment.is_published %}
                     <tr>
                         <td>{{ forloop.counter0|add:assessments_pag.start_index }}</td>
-                        <td><a href="{% url "assessment_detail" assessment.slug %}">{{ assessment.name }}</a></td>
+                        <td>{{ assessment.name }}</td>
                         <td>{{ assessment.created_at }}</td>
                         <td>{{ assessment.ends_at }}</td>
                         <td>
