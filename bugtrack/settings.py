@@ -45,8 +45,6 @@ INSTALLED_APPS = (
     'captcha',
     'preventconcurrentlogins',
     'django-dual-authentication',
-    'rest_framework',
-    'admin_dashboard',
 )
 
 MIDDLEWARE_CLASSES = (
