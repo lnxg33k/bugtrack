@@ -8,7 +8,7 @@ from django.template.defaultfilters import truncatewords_html
 from app.forms import StakeholderForm
 from app.models import (
     Assessment, Finding, Reference, Attachment,
-    Stakeholder, Comment, Url, Instance)
+    Stakeholder, Comment, Url, Instance, Tag)
 
 
 class AttachmentInline(admin.StackedInline):
@@ -105,16 +105,17 @@ class AssessmentAdmin(admin.ModelAdmin):
         models.TextField: {'widget': CKEditorWidget()},
     }
     # define the raw_id_fields
-    raw_id_fields = ['stakeholders', ]
+    raw_id_fields = ['stakeholders', 'tags', ]
     # define the autocomplete_lookup_fields
     autocomplete_lookup_fields = {
-        'm2m': ['stakeholders'],
+        'm2m': ['stakeholders', 'tags'],
     }
     fieldsets = (
         (None, {
             'fields': (
                 ('name', 'slug'), 'introduction', ('created_at', 'ends_at'),
-                ('status', 'is_published', 'publish_date'), 'stakeholders')
+                ('status', 'is_published', 'publish_date'), 'stakeholders',
+                'tags')
         }),
         ('More options', {
             'classes': ('grp-collapse grp-closed',),
@@ -123,7 +124,7 @@ class AssessmentAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'name', 'get_short_introduction', 'get_stakeholders',
+        'name', 'get_short_introduction', 'get_stakeholders', 'get_tags',
         'number_of_findings',
         'status', 'created_at', 'ends_at',  'publish_date', 'is_published'
     )
@@ -146,6 +147,18 @@ class AssessmentAdmin(admin.ModelAdmin):
         return ", ".join(holders)
     get_stakeholders.short_description = 'Stakeholders'
     get_stakeholders.allow_tags = True
+
+    def get_tags(self, obj):
+        # print map(lambda x: x.slug, obj.tags.all())
+        # holders = []
+        # for p in obj.tags.all():
+        #     url = reverse('admin:app_tag_change', args=(p.id,))
+        #     holders.append(
+        #         format_html("<a href=%s>%s</a>" % (url, p.username))
+        #     )
+        return ", ".join(map(lambda x: x.slug, obj.tags.all()))
+    get_tags.short_description = 'Tags'
+    # get_tags.allow_tags = True
 
     def get_queryset(self, request):
         qs = super(AssessmentAdmin, self).get_queryset(request)
@@ -315,6 +328,17 @@ class ReferenceAdmin(admin.ModelAdmin):
     list_display = ('name', 'url')
     list_filter = ('name',)
     search_fields = ['name']
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+
+    '''
+        Admin View for Tag
+    '''
+    list_display = ('slug', )
+    list_filter = ('slug',)
+    search_fields = ['slug']
 
 
 @admin.register(Attachment)

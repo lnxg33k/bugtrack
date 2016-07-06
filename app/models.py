@@ -32,6 +32,17 @@ class Stakeholder(User):
         proxy = True
 
 
+class Tag(models.Model):
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "slug__icontains",)
+
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def __str__(self):
+        return "%s" % self.slug
+
+
 class Assessment(models.Model):
     status_choices = (
         ("progress", "In Progress"),
@@ -53,6 +64,7 @@ class Assessment(models.Model):
     publish_date = models.DateField("Publish Date", null=True, blank=True)
     created_at = models.DateField("Satrt Date", null=True, blank=True)
     ends_at = models.DateField("End Date", null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     status = models.CharField(
         "Status", blank=True, max_length=50, choices=status_choices)
     updated_at = models.DateTimeField(auto_now=True)
