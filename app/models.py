@@ -187,7 +187,7 @@ class Finding(models.Model):
     fix_date = models.DateTimeField(blank=True, null=True)
     fixed_by = models.ForeignKey(Stakeholder, null=True, blank=True)
     is_published = models.BooleanField(default=False)
-    allow_comments = models.BooleanField('Allow comments', default=True)
+    allow_comments = models.BooleanField('Allow comments', default=False)
     cvssv2 = models.CharField("CVSSv2", max_length=50, null=True, blank=True)
     overview = models.TextField(null=True, blank=True)
     conditions = models.TextField(null=True, blank=True)
