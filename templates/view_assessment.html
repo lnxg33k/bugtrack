@@ -168,16 +168,16 @@
                         <tbody>
                             {% for finding in findings_pag %}
                             {% if assessment.is_published %}
-                            <tr>
+                            <tr class="{% if finding.is_fixed and finding.is_fix_verified %}success{% elif finding.is_fixed and not finding.is_fix_verified %}info{% endif %}">
                                 <td>{{ forloop.counter0|add:findings_pag.start_index }}</td>
                                 <td>{{ finding.title }}</td>
                                 <td><small>
                                     {% if finding.get_risk_display == 'Critical' or finding.get_risk_display == 'High' %}
-                                    <span class="label label-danger" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    <span class="label label-danger" >{{ finding.get_risk_display|capfirst }}</span>
                                     {% elif finding.get_risk_display == 'Medium' %}
-                                    <span class="label label-warning" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    <span class="label label-warning">{{ finding.get_risk_display|capfirst }}</span>
                                     {% else %}
-                                    <span class="label label-info" data-toggle="tooltip" data-placement="right" data-container="body" title="{{ finding.get_risk_display }}">{{ finding.get_risk_display.0|capfirst }}</span>
+                                    <span class="label label-info" >{{ finding.get_risk_display|capfirst }}</span>
                                     {% endif %}</small>
                                 </td>
                                 <td>
