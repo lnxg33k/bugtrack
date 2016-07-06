@@ -72,7 +72,7 @@ ul.nav-tabs.affix{
 {% endblock extra_css %}
 {% block content %}
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="row">
             <div class="col-md-7">
                 <small>
@@ -286,6 +286,7 @@ ul.nav-tabs.affix{
                         </div>
                     </div>
                     {% endif %}
+                    {% if finding.allow_comments %}
                     <div class="panel panel-default">
                         <div class="panel-heading" id="headingComments" data-toggle="collapse" data-parent="#accordion" data-target="#Comments">
                             <h4 class="panel-title">
@@ -356,10 +357,12 @@ ul.nav-tabs.affix{
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
+    {% comment %}
     <div class="col-md-2 hidden-sm" id="myScrollspy">
         <ul class="nav nav-tabs nav-stacked" id="myNav">
             <li class="active"><a href="#headingOverview">Overview</a></li>
@@ -370,9 +373,10 @@ ul.nav-tabs.affix{
             {% if finding.conditions %}<li><a href="#headingConditions">Conditions</a></li>{% endif %}
             {% if finding.recommendation %}<li><a href="#headingRecommendation">Recommendation</a></li>{% endif %}
             {% if finding.references.all %}<li><a href="#headingReferences">References</a></li>{% endif %}
-            <li><a href="#headingComments">Comments</a></li>
+            {% if finding.allow_comments %}<li><a href="#headingComments">Comments</a></li>{% endif %}
         </ul>
     </div>
+    {% endcomment %}
 </div>
 {% endblock %}
 {% block extra_js %}
