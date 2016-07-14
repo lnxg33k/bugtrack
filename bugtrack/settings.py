@@ -38,7 +38,10 @@ if DEBUG:
     CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
     CAPTCHA_LETTER_ROTATION = None
 else:
-    ALLOWED_HOSTS = ["*.bugtrack.com"]
+    if socket.gethostname() == 'ubuntu':
+        ALLOWED_HOSTS = ['*.bugtrack.com']
+    else:
+        ALLOWED_HOSTS = ["bugtrack.online", "www.bugtrack.online"]
     STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
     STATIC_URL = '/assets/'
 
