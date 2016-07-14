@@ -52,4 +52,9 @@ urlpatterns = [
         login_required(views.add_comment), name='comment'),
     url(r"^add_comment/(?P<finding_id>\d+)/(?P<parent_id>\d+)/$",
         login_required(views.add_comment), name='replayOnComment'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

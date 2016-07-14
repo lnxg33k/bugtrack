@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import socket
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,9 +24,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'pz0l_jwnh5wu_+1u0k92tmf4g+@*@s+9e&e=5!jgkddi6#lk42'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+if socket.gethostname() == 'ruined-sec.local':
+    DEBUG = True
+else:
+    DEBUG = False
+
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+    STATIC_URL = '/static/'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+    CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
+    CAPTCHA_LETTER_ROTATION = None
+else:
+    ALLOWED_HOSTS = ["*.bugtrack.com"]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
+    STATIC_URL = '/assets/'
 
 
 # Application definition
@@ -109,10 +124,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'), )
-STATIC_URL = '/static/'
+# STATIC_URL = '/assets/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
+# if not DEBUG:
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
 
 MEDIA_URL = '/media/'
 
@@ -145,8 +160,6 @@ CKEDITOR_CONFIGS = {
 ACCOUNT_ACTIVATION_DAYS = 7
 PASSWORD_MIN_LENGTH = 8
 # SEND_ACTIVATION_EMAIL = False
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CAPTCHA_OUTPUT_FORMAT = u'%(hidden_field)s%(image)s %(text_field)s'
 
@@ -155,14 +168,3 @@ LOGIN_REDIRECT_URL = '/'
 AUTHENTICATION_BACKENDS = [
     'django-dual-authentication.backends.DualAuthentication'
     ]
-
-# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
-# CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null', )
-# CAPTCHA_LETTER_ROTATION = None
-
-# REST framework configurations
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
