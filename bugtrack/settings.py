@@ -39,7 +39,7 @@ if DEBUG:
     CAPTCHA_LETTER_ROTATION = None
 else:
     if socket.gethostname() == 'ubuntu':
-        ALLOWED_HOSTS = ['*.bugtrack.com']
+        ALLOWED_HOSTS = ['.bugtrack.com']
     else:
         ALLOWED_HOSTS = ["bugtrack.online", "www.bugtrack.online"]
     STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
