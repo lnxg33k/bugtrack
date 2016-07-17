@@ -42,6 +42,7 @@ else:
         ALLOWED_HOSTS = ['.bugtrack.com']
     else:
         ALLOWED_HOSTS = ["bugtrack.online", "www.bugtrack.online"]
+    ADMINS = (('Ahmed', 'ahmedelantry@gmail.com'), )
     STATIC_ROOT = os.path.join(BASE_DIR, 'assets/')
     STATIC_URL = '/assets/'
 
