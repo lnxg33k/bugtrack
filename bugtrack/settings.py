@@ -69,6 +69,7 @@ else:
 
 INSTALLED_APPS = (
     'passwords',
+    'registration',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,7 +82,6 @@ INSTALLED_APPS = (
     'django_bleach',
     'app',
     'captcha',
-    'registration',
     'preventconcurrentlogins',
     'django-dual-authentication',
 )
