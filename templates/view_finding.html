@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
+{% load bleach_tags %}
 {% load i18n %}
 {% block title %}Finding ({{ finding }}){% endblock %}
 {% block extra_css %}
@@ -145,7 +146,7 @@ ul.nav-tabs.affix{
                         </div>
                         <div id="Overview" class="panel-collapse collapse in" aria-labelledby="headingOverview">
                             <div class="panel-body">
-                                {{ finding.overview|safe }}
+                                {{ finding.overview|bleach }}
                             </div>
                         </div>
                     </div>
@@ -160,7 +161,7 @@ ul.nav-tabs.affix{
                         </div>
                         <div id="Risk" class="panel-collapse collapse in" aria-labelledby="headingRisk">
                             <div class="panel-body">
-                                {{ finding.impact|safe }}
+                                {{ finding.impact|bleach }}
                             </div>
                         </div>
                     </div>
@@ -242,7 +243,7 @@ ul.nav-tabs.affix{
                         </div>
                         <div id="Conditions" class="panel-collapse collapse in" aria-labelledby="headingConditions">
                             <div class="panel-body">
-                                {{ finding.conditions|safe }}
+                                {{ finding.conditions|bleach }}
                             </div>
                         </div>
                     </div>
@@ -258,7 +259,7 @@ ul.nav-tabs.affix{
                         </div>
                         <div id="Recommendation" class="panel-collapse collapse in" aria-labelledby="headingRecommendation">
                             <div class="panel-body">
-                                {{ finding.recommendation|safe }}
+                                {{ finding.recommendation|bleach }}
                             </div>
                         </div>
                     </div>
