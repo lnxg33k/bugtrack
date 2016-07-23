@@ -54,6 +54,22 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if assessment.scope %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading" id="headingScope" data-toggle="collapse" data-parent="#accordion" data-target="#Scope">
+                                    <h4 class="panel-title">
+                                    <a class="accordion-toggle">
+                                    Scope<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
+                                    </a>
+                                    </h4>
+                                </div>
+                                <div id="Scope" class="panel-collapse collapse in" aria-labelledby="headingScope">
+                                    <div class="panel-body">
+                                        {{ assessment.scope|bleach }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             {% if assessment.summary %}
                             <div class="panel panel-default">
                                 <div class="panel-heading" id="headingSummary" data-toggle="collapse" data-parent="#accordion" data-target="#summary">
@@ -96,22 +112,6 @@
                                                 {# <button class="btn btn-primary btn-xs pull-right">Add</button> #}
                                             {# </div> #}
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-                            {% if assessment.scope %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingScope" data-toggle="collapse" data-parent="#accordion" data-target="#Scope">
-                                    <h4 class="panel-title">
-                                    <a class="accordion-toggle">
-                                    Scope<span class="pull-right"><small><i class="fa fa-compress"></i> Show/Hide</small></span>
-                                    </a>
-                                    </h4>
-                                </div>
-                                <div id="Scope" class="panel-collapse collapse in" aria-labelledby="headingScope">
-                                    <div class="panel-body">
-                                        {{ assessment.scope|bleach }}
                                     </div>
                                 </div>
                             </div>
