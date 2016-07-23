@@ -54,7 +54,8 @@ urlpatterns = patterns('',
                            'django.contrib.auth.views.password_change',
                            {'password_change_form': ChangePasswordForm,
                             'post_change_redirect': reverse_lazy(
-                                'auth_password_change_done')},
+                                'auth_password_change_done'),
+							'template_name': 'registration/password_change_form2.html'},
                            name='auth_password_change'),
                        url(r'^password/change/done/$',
                            auth_views.password_change_done,
@@ -72,10 +73,10 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
-                       url(r'^update/$', login_required(updateUserProfile), {
-                           'template_name': 'registration/profile_update.html'
-                           },
-                           name='update_profile')
+                    #    url(r'^update/$', login_required(updateUserProfile), {
+                    #        'template_name': 'registration/profile_update.html'
+                    #        },
+                    #        name='update_profile')
                        )
 
 if (LooseVersion(get_version()) >= LooseVersion('1.6')):

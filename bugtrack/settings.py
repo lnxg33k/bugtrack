@@ -68,9 +68,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = (
-    'registration',
-    'grappelli',
     'passwords',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -82,6 +81,7 @@ INSTALLED_APPS = (
     'django_bleach',
     'app',
     'captcha',
+    'registration',
     'preventconcurrentlogins',
     'django-dual-authentication',
 )
