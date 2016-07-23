@@ -88,3 +88,19 @@ def add_comment(request, finding_id, parent_id=None):
             'assessment_slug': finding.assessment.slug, 'slug': finding.slug
         }
     ))
+
+
+def redirect_to404(request):
+    return render_to_response(
+        'errors/404.html',
+        {},
+        context_instance=RequestContext(request)
+    )
+
+
+def redirect_to505(request):
+    return render_to_response(
+        'errors/500.html',
+        {},
+        context_instance=RequestContext(request)
+    )

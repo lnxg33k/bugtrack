@@ -1,3 +1,4 @@
-django==1.8.2
+django==1.8.14
 pillow
 six
+mysql-python
