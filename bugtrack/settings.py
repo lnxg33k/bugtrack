@@ -96,6 +96,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'preventconcurrentlogins.middleware.PreventConcurrentLoginsMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
 )
 
 ROOT_URLCONF = 'bugtrack.urls'
