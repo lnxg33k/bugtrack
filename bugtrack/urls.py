@@ -41,18 +41,21 @@ urlpatterns = [
     url(r'^assessment/(?P<assessment_slug>[-\w]+)/(?P<slug>[-\w]+)$',
         login_required(views.view_finding),
         name='finding_detail'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^e965e6c80ed29c16bf1a6d9fd3cb4293/', include(admin.site.urls)),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/register/$', login_forbidden(RegistrationView.as_view(
         form_class=RegistrationFormUniqueEmail)),
         name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
-    url(r'^ckeditor-supersecret/', include('ckeditor.urls')),
+    # url(r'^ckeditor-supersecret/', include('ckeditor.urls')),
     url(r"^add_comment/(?P<finding_id>\d+)/$",
         login_required(views.add_comment), name='comment'),
     url(r"^add_comment/(?P<finding_id>\d+)/(?P<parent_id>\d+)/$",
         login_required(views.add_comment), name='replayOnComment'),
 ]
+
+handler404 = "app.views.redirect_to404"
+handler500 = "app.views.redirect_to500"
 
 if settings.DEBUG:
     urlpatterns += static(

@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% load static from staticfiles %} {% block title %} Error 404 {% endblock %} {% block navbar %} {% endblock %} {% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="alert alert-danger" style="margin-right: 55px"> <strong>Oh snap!</strong> I have no idea where that file is, sorry. Are you sure you typed in the correct URL? </div>
+    </div>
+    <div class="col-md-9 col-md-offset-3">
+        <img src="{% static "img/bug.png" %}">
+    </div>
+</div>
+{% endblock %}

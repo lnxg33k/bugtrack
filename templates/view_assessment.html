@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
+{% load bleach_tags %}
 {% load i18n %}
 {% block title %}Assessment ({{ assessment }}){% endblock %}
 {% block extra_css %}
@@ -49,7 +50,7 @@
                                 </div>
                                 <div id="introduction" class="panel-collapse collapse in" aria-labelledby="headingIntroduction">
                                     <div class="panel-body">
-                                        {{ assessment.introduction|safe }}
+                                        {{ assessment.introduction|bleach }}
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +65,7 @@
                                 </div>
                                 <div id="summary" class="panel-collapse collapse in" aria-labelledby="headingSummary">
                                     <div class="panel-body">
-                                        {{ assessment.summary|safe }}
+                                        {{ assessment.summary|bleach }}
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@
                                 </div>
                                 <div id="Scope" class="panel-collapse collapse in" aria-labelledby="headingScope">
                                     <div class="panel-body">
-                                        {{ assessment.scope|safe }}
+                                        {{ assessment.scope|bleach }}
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +127,7 @@
                                 </div>
                                 <div id="Methodology" class="panel-collapse collapse in" aria-labelledby="headingMethodology">
                                     <div class="panel-body">
-                                        {{ assessment.methodology|safe }}
+                                        {{ assessment.methodology|bleach }}
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +143,7 @@
                                 </div>
                                 <div id="Caveats" class="panel-collapse collapse in" aria-labelledby="headingCaveats">
                                     <div class="panel-body">
-                                        {{ assessment.caveats|safe }}
+                                        {{ assessment.caveats|bleach }}
                                     </div>
                                 </div>
                             </div>

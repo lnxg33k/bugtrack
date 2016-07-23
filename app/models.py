@@ -127,9 +127,9 @@ class Instance(models.Model):
 
 
 class Attachment(models.Model):
-    finding = models.ForeignKey('Finding', null=True, blank=True)
+    finding = models.ForeignKey('Finding')
     image = models.ImageField(
-        upload_to="images/%Y/%m/%d", null=True, blank=True)
+        upload_to="images/%Y/%m/%d")
     title = models.CharField("Title", null=True, blank=True, max_length=50)
 
     class Meta:
