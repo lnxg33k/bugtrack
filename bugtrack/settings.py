@@ -188,7 +188,7 @@ CKEDITOR_CONFIGS = {
 # Which HTML tags are allowed
 BLEACH_ALLOWED_TAGS = [
     'p', 'b', 'i', 'u', 'em', 'strong', 'a',
-    'pre', 'code', 'ol', 'ul', 'li']
+    'pre', 'code', 'ol', 'ul', 'li', 'hr']
 
 # Which HTML attributes are allowed
 BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style']
