@@ -52,6 +52,9 @@ urlpatterns = [
         login_required(views.add_comment), name='comment'),
     url(r"^add_comment/(?P<finding_id>\d+)/(?P<parent_id>\d+)/$",
         login_required(views.add_comment), name='replayOnComment'),
+
+    url(r"^fix/(?P<assessment_slug>[-\w]+)/(?P<finding_id>\d+)/$",
+        login_required(views.add_fix), name='fix'),
 ]
 
 handler404 = "app.views.redirect_to404"

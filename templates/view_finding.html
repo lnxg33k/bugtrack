@@ -112,16 +112,16 @@ ul.nav-tabs.affix{
                                 <h4 class="modal-title" id="exampleModalLabel">Can you please update on how that was fixed?!</h4>
                             </div>
                             <div class="modal-body">
-                                <form class="form">
+                                <form action="{% url "fix" assessment.slug finding.id %}" class="form" method="POST">{% csrf_token %}
                                     <div class="form-group">
-                                        <!-- <label for="message-text" class="control-label">Message:</label> -->
-                                        <textarea rows="20" class="form-control" id="message-text" placeholder="This feature is still under development."></textarea>
+                                        <textarea name="fix_message" rows="20" class="form-control" id="message-text" placeholder="How did you fix it?"></textarea>
                                     </div>
-                                </form>
+                                
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
                             </div>
                         </div>
                     </div>

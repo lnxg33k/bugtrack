@@ -142,7 +142,7 @@ class Attachment(models.Model):
     def save(self, *args, **kwargs):
             if self.image:
                 image = Img.open(StringIO.StringIO(self.image.read()))
-                image = image.convert("RGBA")
+                image = image.convert("RGB")
                 image.thumbnail((1000, 1000), Img.ANTIALIAS)
                 output = StringIO.StringIO()
                 image.save(output, format='JPEG', quality=100)
