@@ -6,6 +6,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from app.models import Assessment, Stakeholder, Finding, Comment
 from app.forms import CommentForm
 from django.contrib import messages
+from django.shortcuts import redirect
+from django.http import HttpResponse
+
+
 # Create your views here.
 
 
@@ -88,6 +92,25 @@ def add_comment(request, finding_id, parent_id=None):
             'assessment_slug': finding.assessment.slug, 'slug': finding.slug
         }
     ))
+
+def add_fix(request, assessment_slug, finding_id):
+     if request.method == "POST":
+        stakeholder = Stakeholder.objects.get(username=request.user)
+        finding = get_object_or_404(Finding, pk=finding_id, assessment__stakeholders=stakeholder)
+        finding.is_fixed = 1
+        fix_message = request.POST.get('fix_message', '')
+        finding.fix_message = fix_message
+        finding.fixed_by_id = stakeholder.id
+
+        finding.save()
+        messages.success(request, "The finding was marked as fixed now.")
+
+     return HttpResponseRedirect(reverse(
+        "finding_detail", kwargs={
+            'assessment_slug': finding.assessment.slug, 'slug': finding.slug
+        }
+    ))
+    
 
 
 def redirect_to404(request):
