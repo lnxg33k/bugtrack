@@ -59,3 +59,5 @@ target/
 db.sqlite3
 assets/
 media/
+
+venv/
