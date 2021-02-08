@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 from django.conf import settings
 
 
@@ -19,8 +19,5 @@ class Migration(migrations.Migration):
                 ('session_key', models.CharField(max_length=40)),
                 ('user', models.OneToOneField(related_name='visitor', to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
     ]

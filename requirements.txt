@@ -1,5 +1,5 @@
 django==1.8.14
 pillow
 six
-mysql-python
+# mysql-python
 bleach

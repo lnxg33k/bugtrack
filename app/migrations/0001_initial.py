@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 import django.contrib.auth.models
 
 
@@ -17,12 +17,14 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50, verbose_name=b'Assessment')),
+                ('slug', models.SlugField(unique=True, null=True, blank=True)),
                 ('introduction', models.TextField(null=True, blank=True)),
                 ('summary', models.TextField(null=True, blank=True)),
                 ('is_published', models.BooleanField(default=False)),
                 ('scope', models.TextField(null=True, blank=True)),
                 ('methodology', models.TextField(null=True, blank=True)),
                 ('caveats', models.TextField(null=True, blank=True)),
+                ('publish_date', models.DateField(null=True, verbose_name=b'Publish Date', blank=True)),
                 ('created_at', models.DateField(null=True, verbose_name=b'Satrt Date', blank=True)),
                 ('ends_at', models.DateField(null=True, verbose_name=b'End Date', blank=True)),
                 ('status', models.CharField(blank=True, max_length=50, verbose_name=b'Status', choices=[(b'progress', b'In Progress'), (b'retesting', b'Retesting'), (b'reporting', b'Reporting'), (b'postponed', b'Postponed'), (b'scheduled', b'Scheduled'), (b'completed', b'Completed')])),
@@ -37,7 +39,7 @@ class Migration(migrations.Migration):
             name='Attachment',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('image', models.ImageField(null=True, upload_to=b'images/%Y/%m/%d', blank=True)),
+                ('image', models.ImageField(upload_to=b'images/%Y/%m/%d')),
                 ('title', models.CharField(max_length=50, null=True, verbose_name=b'Title', blank=True)),
             ],
             options={
@@ -55,6 +57,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
+                'ordering': ['created_at'],
                 'verbose_name': 'Comment',
                 'verbose_name_plural': 'Comments',
             },
@@ -64,18 +67,19 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=50, verbose_name=b'Finding')),
-                ('risk', models.CharField(max_length=50, verbose_name=b'Risk', choices=[(b'informational', b'Informational'), (b'low', b'Low'), (b'medium', b'Medium'), (b'high', b'High'), (b'critical', b'Critical')])),
+                ('slug', models.SlugField(unique=True, null=True, blank=True)),
+                ('risk', models.CharField(max_length=50, verbose_name=b'Risk', choices=[(b'0', b'Informational'), (b'1', b'Low'), (b'2', b'Medium'), (b'3', b'High'), (b'4', b'Critical')])),
                 ('is_fixed', models.BooleanField(default=False)),
+                ('fix_message', models.TextField(null=True, blank=True)),
+                ('is_fix_verified', models.BooleanField(default=False)),
                 ('fix_date', models.DateTimeField(null=True, blank=True)),
                 ('is_published', models.BooleanField(default=False)),
-                ('allow_comments', models.BooleanField(default=True, verbose_name=b'Allow comments')),
+                ('allow_comments', models.BooleanField(default=False, verbose_name=b'Allow comments')),
                 ('cvssv2', models.CharField(max_length=50, null=True, verbose_name=b'CVSSv2', blank=True)),
                 ('overview', models.TextField(null=True, blank=True)),
                 ('conditions', models.TextField(null=True, blank=True)),
                 ('impact', models.TextField(null=True, blank=True)),
                 ('recommendation', models.TextField(null=True, blank=True)),
-                ('instance', models.TextField(null=True, verbose_name=b'Instances', blank=True)),
-                ('url', models.TextField(null=True, verbose_name=b'Demonstration URLs', blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('assessment', models.ForeignKey(to='app.Assessment')),
@@ -83,6 +87,18 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Finding',
                 'verbose_name_plural': 'Findings',
+            },
+        ),
+        migrations.CreateModel(
+            name='Instance',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('instance', models.CharField(max_length=250, verbose_name=b'Instance')),
+                ('finding', models.ForeignKey(blank=True, to='app.Finding', null=True)),
+            ],
+            options={
+                'verbose_name': 'Instance',
+                'verbose_name_plural': 'Affected Instances',
             },
         ),
         migrations.CreateModel(
@@ -95,6 +111,25 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Reference',
                 'verbose_name_plural': 'References',
+            },
+        ),
+        migrations.CreateModel(
+            name='Tag',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('slug', models.SlugField(unique=True, max_length=200)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Url',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('url', models.URLField()),
+                ('finding', models.ForeignKey(blank=True, to='app.Finding', null=True)),
+            ],
+            options={
+                'verbose_name': 'URL',
+                'verbose_name_plural': 'Affected URLs',
             },
         ),
         migrations.CreateModel(
@@ -137,11 +172,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attachment',
             name='finding',
-            field=models.ForeignKey(blank=True, to='app.Finding', null=True),
+            field=models.ForeignKey(to='app.Finding'),
         ),
         migrations.AddField(
             model_name='assessment',
             name='stakeholders',
             field=models.ManyToManyField(to='app.Stakeholder', blank=True),
+        ),
+        migrations.AddField(
+            model_name='assessment',
+            name='tags',
+            field=models.ManyToManyField(to='app.Tag', blank=True),
         ),
     ]
