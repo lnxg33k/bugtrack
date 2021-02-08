@@ -25,7 +25,8 @@ SECRET_KEY = 'pz0l_jwnh5wu_+1u0k92tmf4g+@*@s+9e&e=5!jgkddi6#lk42'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-if socket.gethostname() == 'ruined-sec.local':
+
+if socket.gethostname() in ['ruined-sec.local', 'lab']:
     DEBUG = True
 else:
     DEBUG = False
